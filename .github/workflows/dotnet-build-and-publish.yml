@@ -35,8 +35,5 @@ jobs:
           --tag ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/mct-backend:latest \
           --tag ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/mct-backend:v${{ github.run_number }}
 
-    - name: Docker Login
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
     - name: Docker Push
       run: docker push --all-tags ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/mct-backend
