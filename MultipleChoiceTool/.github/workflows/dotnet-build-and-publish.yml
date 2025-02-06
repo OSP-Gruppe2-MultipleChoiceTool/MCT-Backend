@@ -1,0 +1,39 @@
+name: Build and Publish .NET Application
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-dotnet@v3.0.3
+      with:
+        dotnet-version: 8.x
+
+    - run: |
+        for file in $(find -regextype egrep -regex ".*/.*\.csproj"); do
+          dotnet restore $file
+          dotnet build $file --no-restore --configuration Release --verbosity normal
+          dotnet test $file --no-restore --configuration Release --verbosity normal
+        done
+        
+    - name: Build Image
+      run: |
+        docker build . \
+          --file MultipleChoiceTool.API/Dockerfile \
+          --tag ghcr.io/${{ github.repository_owner }}/mct-backend:latest \
+          --tag ghcr.io/${{ github.repository_owner }}/mct-backend:v${{ github.run_number }} \
+          --cache-from type=registry,ref=ghcr.io/${{ github.repository_owner }}/mct-backend:latest \
+          --cache-to type=registry,ref=ghcr.io/${{ github.repository_owner }}/mct-backend:latest,mode=max
+
+    - name: Docker Login
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+    - name: Docker Push
+      run: |
+        docker push ghcr.io/${{ github.repository_owner }}/mct-backend:latest
+        docker push ghcr.io/${{ github.repository_owner }}/mct-backend:v${{ github.run_number }}
