@@ -1,5 +1,8 @@
 name: Build and Publish .NET Application
 
+permissions:
+  packages: write
+
 on:
   push:
     branches: [ "main" ]
