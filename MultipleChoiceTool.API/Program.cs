@@ -1,3 +1,5 @@
+using MultipleChoiceTool.Infrastructure.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +8,15 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddSqliteDbInfrastructure(builder.Configuration, "MultipleChoiceToolDb");
+}
+else
+{
+    builder.Services.AddSqlServerDbInfrastructure(builder.Configuration, "MultipleChoiceToolDb");
+}
 
 var app = builder.Build();
 
@@ -21,5 +32,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseDbInfrastructure();
 
 app.Run();
