@@ -6,7 +6,6 @@ using MultipleChoiceTool.API.Dtos.Responses;
 using MultipleChoiceTool.Core.Commands;
 using MultipleChoiceTool.Core.Models;
 using MultipleChoiceTool.Core.Queries;
-using MultipleChoiceTool.Service.Queries;
 
 namespace MultipleChoiceTool.API.Controllers;
 
