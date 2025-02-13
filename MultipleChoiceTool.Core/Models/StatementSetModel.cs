@@ -7,4 +7,8 @@ public record StatementSetModel
     public string? Explaination { get; set; }
 
     public string? StatementImage { get; set; }
+
+    public StatementTypeModel? StatementType { get; init; } = null!;
+
+    public ICollection<StatementModel> Statements { get; init; } = null!;
 }
