@@ -11,7 +11,7 @@ using MultipleChoiceTool.Infrastructure.Databases;
 namespace MultipleChoiceTool.Infrastructure.Migrations.Sqlite
 {
     [DbContext(typeof(SqliteDbContext))]
-    [Migration("20250207094502_InitialCreate")]
+    [Migration("20250213075759_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -92,7 +92,7 @@ namespace MultipleChoiceTool.Infrastructure.Migrations.Sqlite
                     b.Property<string>("StatementImage")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("StatementTypeId")
+                    b.Property<Guid?>("StatementTypeId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -151,9 +151,7 @@ namespace MultipleChoiceTool.Infrastructure.Migrations.Sqlite
 
                     b.HasOne("MultipleChoiceTool.Infrastructure.Entities.StatementTypeEntity", "StatementType")
                         .WithMany("StatementSets")
-                        .HasForeignKey("StatementTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StatementTypeId");
 
                     b.Navigation("Questionaire");
 

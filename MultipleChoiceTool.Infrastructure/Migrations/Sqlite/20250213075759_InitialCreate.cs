@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MultipleChoiceTool.Infrastructure.Migrations.SqlServer
+namespace MultipleChoiceTool.Infrastructure.Migrations.Sqlite
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -15,8 +15,8 @@ namespace MultipleChoiceTool.Infrastructure.Migrations.SqlServer
                 name: "Questionaires",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Title = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -27,8 +27,8 @@ namespace MultipleChoiceTool.Infrastructure.Migrations.SqlServer
                 name: "StatementTypes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Title = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -39,9 +39,9 @@ namespace MultipleChoiceTool.Infrastructure.Migrations.SqlServer
                 name: "QuestionaireLinks",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    QuestionaireId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ExpirationDate = table.Column<DateOnly>(type: "date", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    QuestionaireId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ExpirationDate = table.Column<DateOnly>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -58,11 +58,11 @@ namespace MultipleChoiceTool.Infrastructure.Migrations.SqlServer
                 name: "StatementSets",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Explaination = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StatementImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    QuestionaireId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StatementTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Explaination = table.Column<string>(type: "TEXT", nullable: true),
+                    StatementImage = table.Column<string>(type: "TEXT", nullable: true),
+                    QuestionaireId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    StatementTypeId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -77,18 +77,17 @@ namespace MultipleChoiceTool.Infrastructure.Migrations.SqlServer
                         name: "FK_StatementSets_StatementTypes_StatementTypeId",
                         column: x => x.StatementTypeId,
                         principalTable: "StatementTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Statements",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsCorrect = table.Column<bool>(type: "bit", nullable: false),
-                    Statement = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StatementSetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    IsCorrect = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Statement = table.Column<string>(type: "TEXT", nullable: false),
+                    StatementSetId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

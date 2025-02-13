@@ -12,7 +12,7 @@ using MultipleChoiceTool.Infrastructure.Databases;
 namespace MultipleChoiceTool.Infrastructure.Migrations.SqlServer
 {
     [DbContext(typeof(SqlServerDbContext))]
-    [Migration("20250207094347_InitialCreate")]
+    [Migration("20250213080147_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -97,7 +97,7 @@ namespace MultipleChoiceTool.Infrastructure.Migrations.SqlServer
                     b.Property<string>("StatementImage")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("StatementTypeId")
+                    b.Property<Guid?>("StatementTypeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -156,9 +156,7 @@ namespace MultipleChoiceTool.Infrastructure.Migrations.SqlServer
 
                     b.HasOne("MultipleChoiceTool.Infrastructure.Entities.StatementTypeEntity", "StatementType")
                         .WithMany("StatementSets")
-                        .HasForeignKey("StatementTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StatementTypeId");
 
                     b.Navigation("Questionaire");
 

@@ -94,7 +94,7 @@ namespace MultipleChoiceTool.Infrastructure.Migrations.SqlServer
                     b.Property<string>("StatementImage")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("StatementTypeId")
+                    b.Property<Guid?>("StatementTypeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -153,9 +153,7 @@ namespace MultipleChoiceTool.Infrastructure.Migrations.SqlServer
 
                     b.HasOne("MultipleChoiceTool.Infrastructure.Entities.StatementTypeEntity", "StatementType")
                         .WithMany("StatementSets")
-                        .HasForeignKey("StatementTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StatementTypeId");
 
                     b.Navigation("Questionaire");
 
