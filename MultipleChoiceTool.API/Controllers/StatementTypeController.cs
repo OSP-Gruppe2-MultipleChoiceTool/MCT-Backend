@@ -76,9 +76,15 @@ public class StatementTypeController : ControllerBase
     }
 
     [HttpDelete("{statementTypeId}")]
-    public Task<ActionResult> DeleteStatementTypeByIdAsync(
+    public async Task<ActionResult> DeleteStatementTypeByIdAsync(
         [FromRoute] Guid statementTypeId)
     {
-        throw new NotImplementedException();
+        var statementTypeModel = await _mediator.Send(new DeleteStatementTypeCommand(statementTypeId));
+        if (statementTypeModel == null)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
     }
 }
