@@ -1,0 +1,13 @@
+﻿namespace MultipleChoiceTool.Infrastructure.Entities;
+
+internal record StatementEntity
+{
+    public Guid Id { get; init; }
+
+    public bool IsCorrect { get; set; }
+
+    public string Statement { get; set; } = null!;
+
+    public Guid StatementSetId { get; set; }
+    public StatementSetEntity StatementSet { get; set; } = null!;
+}
