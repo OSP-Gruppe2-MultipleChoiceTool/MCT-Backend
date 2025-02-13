@@ -8,7 +8,7 @@ public record StatementSetDto
 
     public string? StatementImage { get; set; }
 
-    public StatementTypeDto? StatementType { get; init; } = null!;
+    public StatementTypeDto? StatementType { get; init; }
 
     public ICollection<StatementDto> Statements { get; init; } = null!;
 }

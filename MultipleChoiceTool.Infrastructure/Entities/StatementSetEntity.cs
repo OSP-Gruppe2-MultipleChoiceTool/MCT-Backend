@@ -12,7 +12,7 @@ internal record StatementSetEntity
     public QuestionaireEntity Questionaire { get; init; } = null!;
 
     public Guid? StatementTypeId { get; init; }
-    public StatementTypeEntity? StatementType { get; init; } = null!;
+    public StatementTypeEntity? StatementType { get; init; }
 
     public ICollection<StatementEntity> Statements { get; init; } = null!;
 }
