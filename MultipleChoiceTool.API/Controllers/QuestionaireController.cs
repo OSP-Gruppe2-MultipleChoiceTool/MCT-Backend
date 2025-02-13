@@ -67,7 +67,7 @@ public class QuestionaireController : ControllerBase
         
         if (questionaireModel == null)
         {
-            return NotFound();
+            return BadRequest();
         }
 
         var questionaireDto = _mapper.Map<QuestionaireResponseDto>(questionaireModel);
@@ -84,7 +84,7 @@ public class QuestionaireController : ControllerBase
             return NotFound();
         }
 
-        return Ok();
+        return NoContent();
     }
 
     [HttpGet("{questionaireId}/export")]

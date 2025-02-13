@@ -5,6 +5,7 @@ using MultipleChoiceTool.API.Dtos.Requests;
 using MultipleChoiceTool.API.Dtos.Responses;
 using MultipleChoiceTool.Core.Commands;
 using MultipleChoiceTool.Core.Models;
+using MultipleChoiceTool.Core.Queries;
 
 namespace MultipleChoiceTool.API.Controllers;
 
@@ -34,7 +35,7 @@ public class StatementSetController : ControllerBase
         
         if (statementSetModel == null)
         {
-            return NotFound();
+            return BadRequest();
         }
 
         var statementSetDto = _mapper.Map<StatementSetResponseDto>(statementSetModel);
@@ -42,17 +43,27 @@ public class StatementSetController : ControllerBase
     }
 
     [HttpGet]
-    public Task<ActionResult<IEnumerable<StatementSetResponseDto>>> GetAllStatementSetsAsync(
+    public async Task<ActionResult<IEnumerable<StatementSetResponseDto>>> GetAllStatementSetsAsync(
         [FromRoute] Guid questionaireId)
     {
-        throw new NotImplementedException();
+        var statementSetModels = await _mediator.Send(new GetAllStatementSetsQuery(questionaireId));
+        if (statementSetModels == null)
+        {
+            return NotFound();
+        }
+        return Ok(_mapper.Map<IEnumerable<StatementSetResponseDto>>(statementSetModels));
     }
 
     [HttpDelete("{statementSetId}")]
-    public Task<ActionResult> DeleteStatementSetAsync(
+    public async Task<ActionResult> DeleteStatementSetAsync(
         [FromRoute] Guid questionaireId,
         [FromRoute] Guid statementSetId)
     {
-        throw new NotImplementedException();
+        var questionaireModel = await _mediator.Send(new DeleteStatementSetCommand(questionaireId, statementSetId));
+        if (questionaireModel == null)
+        {
+            return NotFound();
+        }
+        return Ok();
     }
 }
