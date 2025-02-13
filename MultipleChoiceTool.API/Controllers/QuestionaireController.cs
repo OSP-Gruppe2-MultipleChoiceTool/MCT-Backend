@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MultipleChoiceTool.API.Dtos;
+using MultipleChoiceTool.Core.Commands;
 using MultipleChoiceTool.Core.Models;
 using MultipleChoiceTool.Core.Queries;
 
@@ -23,17 +24,22 @@ public class QuestionaireController : ControllerBase
     }
 
     [HttpPost]
-    public Task<ActionResult<QuestionaireModel>> CreateQuestionaireAsync(
+    public async Task<ActionResult<QuestionaireDto>> CreateQuestionaireAsync(
         [FromBody] QuestionaireDto questionaire)
     {
-        throw new NotImplementedException();
+        var questionaireModel = _mapper.Map<QuestionaireModel>(questionaire);
+
+        questionaireModel = await _mediator.Send(new CreateQuestionaireCommand(questionaireModel));
+        var questionaireDto = _mapper.Map<QuestionaireDto>(questionaireModel);
+        return Ok(questionaireDto);
+
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<QuestionaireModel>>> GetAllQuestionairesAsync()
+    public async Task<ActionResult<IEnumerable<QuestionaireDto>>> GetAllQuestionairesAsync()
     {
         var questionaireModels = await _mediator.Send(new GetAllQuestionairesQuery());
-        var questionaireDtos = _mapper.Map<IEnumerable<QuestionaireModel>>(questionaireModels);
+        var questionaireDtos = _mapper.Map<IEnumerable<QuestionaireDto>>(questionaireModels);
         return Ok(questionaireDtos);
     }
 
