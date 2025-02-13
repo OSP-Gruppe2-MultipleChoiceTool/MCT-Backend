@@ -20,7 +20,9 @@ public static class ServiceExtensions
         services.AddEFBaseRepository<QuestionaireLinkEntity, QuestionaireLinkModel>();
         services.AddEFBaseRepository<StatementEntity, StatementModel>();
         services.AddEFBaseRepository<StatementSetEntity, StatementSetModel>();
+
         services.AddEFBaseRepository<StatementTypeEntity, StatementTypeModel>();
+        services.AddScoped<IStatementTypeReadRepository, EFStatementTypeReadRepository>();
     }
 
     public static void AddSqliteDbInfrastructure(this IServiceCollection services, 

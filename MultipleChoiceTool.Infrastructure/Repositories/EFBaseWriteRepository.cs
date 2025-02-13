@@ -8,8 +8,8 @@ internal class EFBaseWriteRepository<TEntity, TModel> : IBaseWriteRepository<TMo
     where TEntity : class
     where TModel : class
 {
-    private readonly DbContext _dbContext;
-    private readonly IMapper _mapper;
+    protected readonly DbContext _dbContext;
+    protected readonly IMapper _mapper;
 
     public EFBaseWriteRepository(
         DbContext dbContext,

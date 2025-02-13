@@ -9,8 +9,8 @@ internal class EFBaseReadRepository<TEntity, TModel> : IBaseReadRepository<TMode
     where TEntity : class
     where TModel : class
 {
-    private readonly DbContext _dbContext;
-    private readonly IMapper _mapper;
+    protected readonly DbContext _dbContext;
+    protected readonly IMapper _mapper;
 
     public EFBaseReadRepository(
         DbContext dbContext,
