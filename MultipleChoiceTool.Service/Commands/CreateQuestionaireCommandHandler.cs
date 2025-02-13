@@ -22,7 +22,7 @@ namespace MultipleChoiceTool.Service.Commands
 
         public Task<QuestionaireModel> Handle(CreateQuestionaireCommand request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return _questionaireWriteRepository.CreateAsync(request.Questionaire, cancellationToken);
         }
     }
 }
