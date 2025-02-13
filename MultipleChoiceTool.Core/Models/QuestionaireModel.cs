@@ -8,5 +8,5 @@ public record QuestionaireModel
 
     public ICollection<StatementSetModel> StatementSets { get; init; } = null!;
 
-    public ICollection<QuestionaireLinkModel> Links { get; } = null!;
+    public ICollection<QuestionaireLinkModel> Links { get; init; } = null!;
 }

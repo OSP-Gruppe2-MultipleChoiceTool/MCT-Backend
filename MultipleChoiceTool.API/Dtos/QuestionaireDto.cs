@@ -8,5 +8,5 @@ public record QuestionaireDto
 
     public ICollection<StatementSetDto> StatementSets { get; init; } = null!;
 
-    public ICollection<QuestionaireLinkDto> Links { get; } = null!;
+    public ICollection<QuestionaireLinkDto> Links { get; init; } = null!;
 }
