@@ -8,5 +8,5 @@ internal record QuestionaireEntity
 
     public ICollection<StatementSetEntity> StatementSets { get; init; } = null!;
 
-    public ICollection<QuestionaireLinkEntity> QuestionaireLinks { get; } = null!;
+    public ICollection<QuestionaireLinkEntity> QuestionaireLinks { get; init; } = null!;
 }

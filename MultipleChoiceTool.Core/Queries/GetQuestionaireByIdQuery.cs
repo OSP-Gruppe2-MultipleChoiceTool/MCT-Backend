@@ -3,4 +3,4 @@ using MultipleChoiceTool.Core.Models;
 
 namespace MultipleChoiceTool.Core.Queries;
 
-public record GetAllQuestionairesQuery() : IRequest<IEnumerable<QuestionaireModel>>;
+public record GetQuestionaireByIdQuery(Guid QuestionaireId) : IRequest<QuestionaireModel?>;

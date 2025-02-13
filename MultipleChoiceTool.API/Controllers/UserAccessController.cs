@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MultipleChoiceTool.API.Dtos;
+using MultipleChoiceTool.API.Dtos.Responses;
 
 namespace MultipleChoiceTool.API.Controllers;
 
@@ -8,7 +8,7 @@ namespace MultipleChoiceTool.API.Controllers;
 public class UserAccessController : ControllerBase
 {
     [HttpGet]
-    public Task<ActionResult<QuestionaireDto>> GetQuestionaireByLinkAsync(
+    public Task<ActionResult<QuestionaireResponseDto>> GetQuestionaireByLinkAsync(
         [FromQuery] Guid linkId, 
         [FromQuery] bool isExam)
     {

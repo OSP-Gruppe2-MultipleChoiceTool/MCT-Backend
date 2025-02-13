@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MultipleChoiceTool.API.Dtos;
+using MultipleChoiceTool.API.Dtos.Requests;
+using MultipleChoiceTool.API.Dtos.Responses;
 using MultipleChoiceTool.Core.Commands;
 using MultipleChoiceTool.Core.Models;
 
@@ -24,19 +25,24 @@ public class StatementSetController : ControllerBase
 
 
     [HttpPost]
-    public async Task<ActionResult<StatementSetDto>> CreateStatementSetAsync(
+    public async Task<ActionResult<StatementSetResponseDto>> CreateStatementSetAsync(
         [FromRoute] Guid questionaireId,
-        [FromBody] StatementSetDto statementSet)
+        [FromBody] StatementSetRequestDto statementSet)
     {
         var statementSetModel = _mapper.Map<StatementSetModel>(statementSet);
+        statementSetModel = await _mediator.Send(new CreateStatementSetCommand(questionaireId, statementSetModel));
+        
+        if (statementSetModel == null)
+        {
+            return NotFound();
+        }
 
-        statementSetModel = await _mediator.Send(new CreateStatementSetCommand(statementSetModel));
-        var statementSetDto = _mapper.Map<StatementSetDto>(statementSetModel);
+        var statementSetDto = _mapper.Map<StatementSetResponseDto>(statementSetModel);
         return Ok(statementSetDto);
     }
 
     [HttpGet]
-    public Task<ActionResult<IEnumerable<StatementSetDto>>> GetAllStatementSetsAsync(
+    public Task<ActionResult<IEnumerable<StatementSetResponseDto>>> GetAllStatementSetsAsync(
         [FromRoute] Guid questionaireId)
     {
         throw new NotImplementedException();

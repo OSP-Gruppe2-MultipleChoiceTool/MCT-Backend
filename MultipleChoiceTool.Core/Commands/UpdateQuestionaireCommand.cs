@@ -3,7 +3,7 @@ using MultipleChoiceTool.Core.Models;
 
 namespace MultipleChoiceTool.Core.Commands;
 
-public record CreateStatementSetCommand(
+public record UpdateQuestionaireCommand(
     Guid QuestionaireId, 
-    StatementSetModel StatementSet
-) : IRequest<StatementSetModel?>;
+    QuestionaireModel Questionaire
+) : IRequest<QuestionaireModel?>;
