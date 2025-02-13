@@ -10,8 +10,4 @@
     <ProjectReference Include="..\MultipleChoiceTool.Core\MultipleChoiceTool.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Commands\" />
-  </ItemGroup>
-
 </Project>

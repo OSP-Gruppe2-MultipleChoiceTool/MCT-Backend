@@ -5,18 +5,18 @@ using MultipleChoiceTool.Core.Repositories;
 
 namespace MultipleChoiceTool.Service.Queries;
 
-internal class GetAllQuestionairesQueryHandler : IRequestHandler<GetAllQuestionairesQuery, IEnumerable<QuestionaireModel>>
+internal class GetQuestionaireByIdQueryHandler : IRequestHandler<GetQuestionaireByIdQuery, QuestionaireModel?>
 {
     private readonly IBaseReadRepository<QuestionaireModel> _questionaireReadRepository;
 
-    public GetAllQuestionairesQueryHandler(
+    public GetQuestionaireByIdQueryHandler(
         IBaseReadRepository<QuestionaireModel> questionaireReadRepository)
     {
         _questionaireReadRepository = questionaireReadRepository;
     }
 
-    public async Task<IEnumerable<QuestionaireModel>> Handle(GetAllQuestionairesQuery request, CancellationToken cancellationToken)
+    public async Task<QuestionaireModel?> Handle(GetQuestionaireByIdQuery request, CancellationToken cancellationToken)
     {
-        return await _questionaireReadRepository.FindAllAsync(cancellationToken);
+        return await _questionaireReadRepository.FindByIdAsync(request.Id, cancellationToken);
     }
 }

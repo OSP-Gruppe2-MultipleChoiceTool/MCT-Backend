@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MultipleChoiceTool.API.Dtos;
+using MultipleChoiceTool.Core.Commands;
 using MultipleChoiceTool.Core.Models;
 using MultipleChoiceTool.Core.Queries;
 
@@ -38,25 +39,47 @@ public class QuestionaireController : ControllerBase
     }
 
     [HttpGet("{questionaireId}")]
-    public Task<ActionResult<QuestionaireModel>> GetQuestionaireByIdAsync(
+    public async Task<ActionResult<QuestionaireModel>> GetQuestionaireByIdAsync(
         [FromRoute] Guid questionaireId)
     {
-        throw new NotImplementedException();
+        var questionaireModel = await _mediator.Send(new GetQuestionaireByIdQuery(questionaireId));
+        if (questionaireModel == null)
+        {
+            return NotFound();
+        }
+
+        var questionaireDto = _mapper.Map<QuestionaireModel>(questionaireModel);
+        return Ok(questionaireDto);
     }
 
     [HttpPatch("{questionaireId}")]
-    public Task<ActionResult<QuestionaireModel>> UpdateQuestionaireAsync(
+    public async Task<ActionResult<QuestionaireModel>> UpdateQuestionaireAsync(
         [FromRoute] Guid questionaireId,
         [FromBody] QuestionaireDto questionaire)
     {
-        throw new NotImplementedException();
+        var questionaireModel = _mapper.Map<QuestionaireModel>(questionaire);
+        questionaireModel = await _mediator.Send(new UpdateQuestionaireCommand(questionaireId, questionaireModel));
+        
+        if (questionaireModel == null)
+        {
+            return NotFound();
+        }
+
+        var questionaireDto = _mapper.Map<QuestionaireModel>(questionaireModel);
+        return Ok(questionaireDto);
     }
 
     [HttpDelete("{questionaireId}")]
-    public Task<ActionResult> DeleteQuestionaireAsync(
+    public async Task<ActionResult> DeleteQuestionaireAsync(
         [FromRoute] Guid questionaireId)
     {
-        throw new NotImplementedException();
+        var questionaireModel = await _mediator.Send(new DeleteQuestionaireCommand(questionaireId));
+        if (questionaireModel == null)
+        {
+            return NotFound();
+        }
+
+        return Ok();
     }
 
     [HttpGet("{questionaireId}/export")]
