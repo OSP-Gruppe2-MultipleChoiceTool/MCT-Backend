@@ -5,6 +5,7 @@ using MultipleChoiceTool.API.Dtos.Requests;
 using MultipleChoiceTool.API.Dtos.Responses;
 using MultipleChoiceTool.Core.Commands;
 using MultipleChoiceTool.Core.Models;
+using MultipleChoiceTool.Core.Queries;
 
 namespace MultipleChoiceTool.API.Controllers;
 
@@ -36,10 +37,17 @@ public class QuestionaireLinkController : ControllerBase
     }
 
     [HttpGet]
-    public Task<ActionResult<IEnumerable<QuestionaireLinkResponseDto>>> GetAllLinksAsync(
+    public async Task<ActionResult<IEnumerable<QuestionaireLinkResponseDto>>> GetAllLinksAsync(
         [FromRoute] Guid questionaireId)
     {
-        throw new NotImplementedException();
+        var linkModels = await _mediator.Send(new GetAllLinksQuery(questionaireId));
+        if (linkModels == null)
+        {
+            return BadRequest();
+        }
+
+        var linkDtos = _mapper.Map<IEnumerable<QuestionaireLinkResponseDto>>(linkModels);
+        return Ok(linkDtos);
     }
 
     [HttpPatch("{linkId}")]
