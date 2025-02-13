@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using MultipleChoiceTool.API.Dtos.Requests;
 using MultipleChoiceTool.API.Dtos.Responses;
+using MultipleChoiceTool.Core.Commands;
+using MultipleChoiceTool.Core.Models;
 
 namespace MultipleChoiceTool.API.Controllers;
 
@@ -7,11 +12,26 @@ namespace MultipleChoiceTool.API.Controllers;
 [Route("api/statement-types")]
 public class StatementTypeController : ControllerBase
 {
-    [HttpPut]
-    public Task<ActionResult<StatementTypeResponseDto>> AddStatementTypeAsync(
-        [FromBody] StatementTypeResponseDto statementType)
+    private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
+
+    public StatementTypeController(
+        IMediator mediator,
+        IMapper mapper)
     {
-        throw new NotImplementedException();
+        _mediator = mediator;
+        _mapper = mapper;
+    }
+
+    [HttpPut]
+    public async Task<ActionResult<StatementTypeResponseDto>> AddStatementTypeAsync(
+        [FromBody] StatementTypeRequestDto statementType)
+    {
+        var statementTypeModel = _mapper.Map<StatementTypeModel>(statementType);
+        statementTypeModel = await _mediator.Send(new CreateStatementTypeCommand(statementTypeModel));
+
+        var statementTypeDto = _mapper.Map<StatementTypeResponseDto>(statementTypeModel);
+        return Ok(statementTypeDto);
     }
 
     [HttpGet]
