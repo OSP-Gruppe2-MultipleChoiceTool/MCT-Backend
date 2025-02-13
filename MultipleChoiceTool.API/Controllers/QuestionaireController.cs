@@ -36,10 +36,10 @@ public class QuestionaireController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<QuestionaireModel>>> GetAllQuestionairesAsync()
+    public async Task<ActionResult<IEnumerable<QuestionaireDto>>> GetAllQuestionairesAsync()
     {
         var questionaireModels = await _mediator.Send(new GetAllQuestionairesQuery());
-        var questionaireDtos = _mapper.Map<IEnumerable<QuestionaireModel>>(questionaireModels);
+        var questionaireDtos = _mapper.Map<IEnumerable<QuestionaireDto>>(questionaireModels);
         return Ok(questionaireDtos);
     }
 
