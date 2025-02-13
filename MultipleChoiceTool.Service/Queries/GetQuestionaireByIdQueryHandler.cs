@@ -17,6 +17,6 @@ internal class GetQuestionaireByIdQueryHandler : IRequestHandler<GetQuestionaire
 
     public async Task<QuestionaireModel?> Handle(GetQuestionaireByIdQuery request, CancellationToken cancellationToken)
     {
-        return await _questionaireReadRepository.FindByIdAsync(request.Id, cancellationToken);
+        return await _questionaireReadRepository.FindByIdAsync(request.QuestionaireId, cancellationToken);
     }
 }

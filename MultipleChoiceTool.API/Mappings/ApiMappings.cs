@@ -11,5 +11,8 @@ public class ApiMappings : Profile
     {
         CreateMap<QuestionaireModel, QuestionaireResponseDto>();
         CreateMap<QuestionaireRequestDto, QuestionaireModel>();
+
+        CreateMap<StatementSetModel, StatementSetResponseDto>();
+        CreateMap<StatementSetRequestDto, StatementSetModel>();
     }
 }

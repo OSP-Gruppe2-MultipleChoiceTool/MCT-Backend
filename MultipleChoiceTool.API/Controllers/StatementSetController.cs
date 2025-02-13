@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using MultipleChoiceTool.API.Dtos.Requests;
 using MultipleChoiceTool.API.Dtos.Responses;
+using MultipleChoiceTool.Core.Commands;
+using MultipleChoiceTool.Core.Models;
 
 namespace MultipleChoiceTool.API.Controllers;
 
@@ -7,12 +12,33 @@ namespace MultipleChoiceTool.API.Controllers;
 [Route("api/questionaires/{questionaireId}/statement-sets")]
 public class StatementSetController : ControllerBase
 {
-    [HttpPost]
-    public Task<ActionResult<StatementSetResponseDto>> CreateStatementSetAsync(
-        [FromRoute] Guid questionaireId,
-        [FromBody] StatementSetResponseDto statementSet)
+    private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
+
+    public StatementSetController(
+        IMediator mediator,
+        IMapper mapper)
     {
-        throw new NotImplementedException();
+        _mediator = mediator;
+        _mapper = mapper;
+    }
+
+
+    [HttpPost]
+    public async Task<ActionResult<StatementSetResponseDto>> CreateStatementSetAsync(
+        [FromRoute] Guid questionaireId,
+        [FromBody] StatementSetRequestDto statementSet)
+    {
+        var statementSetModel = _mapper.Map<StatementSetModel>(statementSet);
+        statementSetModel = await _mediator.Send(new CreateStatementSetCommand(questionaireId, statementSetModel));
+        
+        if (statementSetModel == null)
+        {
+            return NotFound();
+        }
+
+        var statementSetDto = _mapper.Map<StatementSetResponseDto>(statementSetModel);
+        return Ok(statementSetDto);
     }
 
     [HttpGet]

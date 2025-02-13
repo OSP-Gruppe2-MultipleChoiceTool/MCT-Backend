@@ -1,28 +1,35 @@
 ﻿using MediatR;
 using MultipleChoiceTool.Core.Commands;
 using MultipleChoiceTool.Core.Models;
+using MultipleChoiceTool.Core.Queries;
 using MultipleChoiceTool.Core.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MultipleChoiceTool.Service.Commands
 {
-    public class CreateStatementSetCommandHandlers : IRequestHandler<CreateStatementSetCommand, StatementSetModel>
+    public class CreateStatementSetCommandHandlers : IRequestHandler<CreateStatementSetCommand, StatementSetModel?>
     {
         private readonly IBaseWriteRepository<StatementSetModel> _statementSetWriteRepository;
+        private readonly IMediator _mediator;
 
         public CreateStatementSetCommandHandlers(
-            IBaseWriteRepository<StatementSetModel> statementSetWriteRepository)
+            IBaseWriteRepository<StatementSetModel> statementSetWriteRepository,
+            IMediator mediator)
         {
             _statementSetWriteRepository = statementSetWriteRepository;
+            _mediator = mediator;
         }
 
-        public Task<StatementSetModel> Handle(CreateStatementSetCommand request, CancellationToken cancellationToken)
+        public async Task<StatementSetModel?> Handle(CreateStatementSetCommand request, CancellationToken cancellationToken)
         {
-            return _statementSetWriteRepository.CreateAsync(request.StatementSet, cancellationToken);
+            var questionaire = await _mediator.Send(new GetQuestionaireByIdQuery(request.QuestionaireId), cancellationToken);
+            if (questionaire == null)
+            {
+                return null;
+            }
+
+            request.StatementSet.QuestionaireId = questionaire.Id;
+
+            return await _statementSetWriteRepository.CreateAsync(request.StatementSet, cancellationToken);
         }
     }
 }

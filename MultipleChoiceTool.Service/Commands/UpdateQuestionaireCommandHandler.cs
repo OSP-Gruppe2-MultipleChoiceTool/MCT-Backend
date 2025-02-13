@@ -21,7 +21,7 @@ internal class UpdateQuestionaireCommandHandler : IRequestHandler<UpdateQuestion
 
     public async Task<QuestionaireModel?> Handle(UpdateQuestionaireCommand request, CancellationToken cancellationToken)
     {
-        var questionaire = await _mediator.Send(new GetQuestionaireByIdQuery(request.Id));
+        var questionaire = await _mediator.Send(new GetQuestionaireByIdQuery(request.QuestionaireId));
         if (questionaire == null)
         {
             return null;
