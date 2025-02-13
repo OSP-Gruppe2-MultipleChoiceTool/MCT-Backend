@@ -1,8 +1,13 @@
+using MultipleChoiceTool.API.Extensions;
 using MultipleChoiceTool.Infrastructure.Extensions;
+using MultipleChoiceTool.Service.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddMultipleChoiceToolInfrastructure();
+builder.Services.AddMultipleChoiceToolService();
+builder.Services.AddMultipleChoiceToolApi();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

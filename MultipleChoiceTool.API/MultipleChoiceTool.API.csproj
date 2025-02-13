@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MultipleChoiceTool.Infrastructure\MultipleChoiceTool.Infrastructure.csproj" />
     <ProjectReference Include="..\MultipleChoiceTool.Service\MultipleChoiceTool.Service.csproj" />
   </ItemGroup>
 

@@ -21,10 +21,14 @@ internal abstract class BaseDbContext<T> : DbContext
 
     public virtual DbSet<StatementTypeEntity> StatementTypes { get; set; } = null!;
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        // Do not use tracking as we are always throwing away our entities and mapping them to models
+        optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
-
         modelBuilder.Entity<QuestionaireEntity>(questionaire =>
         {
             questionaire.HasKey(questionaire => questionaire.Id);
