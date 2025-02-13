@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using MultipleChoiceTool.API.Dtos.Requests;
 using MultipleChoiceTool.API.Dtos.Responses;
+using MultipleChoiceTool.Core.Commands;
 using MultipleChoiceTool.Core.Models;
 
 namespace MultipleChoiceTool.API.Controllers;
@@ -8,25 +12,41 @@ namespace MultipleChoiceTool.API.Controllers;
 [Route("api/questionaires/{questionaireId}/links")]
 public class QuestionaireLinkController : ControllerBase
 {
-    [HttpPost]
-    public Task<ActionResult<QuestionaireLinkModel>> CreateLinkAsync(
-        [FromRoute] Guid questionaireId)
+    private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
+
+    public QuestionaireLinkController(
+        IMediator mediator,
+        IMapper mapper)
     {
-        throw new NotImplementedException();
+        _mediator = mediator;
+        _mapper = mapper;
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<QuestionaireLinkResponseDto>> CreateLinkAsync(
+        [FromRoute] Guid questionaireId,
+        [FromBody] QuestionaireLinkRequestDto link)
+    {
+        var linkModel = _mapper.Map<QuestionaireLinkModel>(link);
+        linkModel = await _mediator.Send(new CreateLinkCommand(questionaireId, linkModel));
+
+        var linkDto = _mapper.Map<QuestionaireLinkResponseDto>(linkModel);
+        return Ok(linkDto);
     }
 
     [HttpGet]
-    public Task<ActionResult<IEnumerable<QuestionaireLinkModel>>> GetAllLinksAsync(
+    public Task<ActionResult<IEnumerable<QuestionaireLinkResponseDto>>> GetAllLinksAsync(
         [FromRoute] Guid questionaireId)
     {
         throw new NotImplementedException();
     }
 
     [HttpPatch("{linkId}")]
-    public Task<ActionResult<QuestionaireLinkModel>> UpdateLinkAsync(
+    public Task<ActionResult<QuestionaireLinkResponseDto>> UpdateLinkAsync(
         [FromRoute] Guid questionaireId, 
         [FromRoute] Guid linkId, 
-        [FromBody] QuestionaireLinkResponseDto link)
+        [FromBody] QuestionaireLinkRequestDto link)
     {
         throw new NotImplementedException();
     }
