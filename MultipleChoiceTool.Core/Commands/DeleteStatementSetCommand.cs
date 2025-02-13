@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace MultipleChoiceTool.Core.Commands
 {
-    public record DeleteStatementSetCommand(Guid QuestionaireId, Guid statementSetId) : IRequest<QuestionaireModel?>;
+    public record DeleteStatementSetCommand(Guid QuestionaireId, Guid statementSetId) : IRequest<StatementSetModel?>;
 }

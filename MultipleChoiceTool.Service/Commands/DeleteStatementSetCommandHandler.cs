@@ -24,7 +24,7 @@ namespace MultipleChoiceTool.Service.Commands
             _mediator = mediator;
         }
 
-        public async Task<QuestionaireModel?> Handle(DeleteStatementSetCommand request, CancellationToken cancellationToken)
+        public async Task<StatementSetModel?> Handle(DeleteStatementSetCommand request, CancellationToken cancellationToken)
         {
             var questionaire = await _mediator.Send(new GetQuestionaireByIdQuery(request.QuestionaireId));
             if (questionaire == null)
@@ -39,7 +39,9 @@ namespace MultipleChoiceTool.Service.Commands
             }
 
             questionaire.StatementSets.Remove(statementSet);
-            return await _questionaireWriteRepository.UpdateAsync(questionaire, cancellationToken);
+            questionaire = await _questionaireWriteRepository.UpdateAsync(questionaire, cancellationToken);
+
+            return statementSet;
         }
     }
 }
