@@ -6,6 +6,7 @@ using MultipleChoiceTool.API.Dtos.Responses;
 using MultipleChoiceTool.Core.Commands;
 using MultipleChoiceTool.Core.Models;
 using MultipleChoiceTool.Core.Queries;
+using MultipleChoiceTool.Service.Queries;
 
 namespace MultipleChoiceTool.API.Controllers;
 
@@ -44,10 +45,17 @@ public class StatementTypeController : ControllerBase
     }
 
     [HttpGet("{statementTypeId}")]
-    public Task<ActionResult<StatementTypeResponseDto>> GetStatementTypeByIdAsync(
+    public async Task<ActionResult<StatementTypeResponseDto>> GetStatementTypeByIdAsync(
         [FromRoute] Guid statementTypeId)
     {
-        throw new NotImplementedException();
+        var statementTypeModel = await _mediator.Send(new GetStatementTypeByIdQuery(statementTypeId));
+        if (statementTypeModel == null)
+        {
+            return NotFound();
+        }
+
+        var statementTypeDto = _mapper.Map<StatementTypeResponseDto>(statementTypeModel);
+        return Ok(statementTypeDto);
     }
 
     [HttpPatch("{statementTypeId}")]
