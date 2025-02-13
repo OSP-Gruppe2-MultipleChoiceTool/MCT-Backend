@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MultipleChoiceTool.API.Dtos;
+using MultipleChoiceTool.API.Dtos.Responses;
 using MultipleChoiceTool.Core.Models;
 
 namespace MultipleChoiceTool.API.Controllers;
@@ -12,7 +12,7 @@ public class StatementController : ControllerBase
     public Task<ActionResult<StatementModel>> AddStatementAsync(
         [FromRoute] Guid questionaireId,
         [FromRoute] Guid statementSetId,
-        [FromBody] StatementDto statement)
+        [FromBody] StatementResponseDto statement)
     {
         throw new NotImplementedException();
     }
@@ -22,7 +22,7 @@ public class StatementController : ControllerBase
         [FromRoute] Guid questionaireId,
         [FromRoute] Guid statementSetId,
         [FromRoute] Guid statementId,
-        [FromBody] StatementDto statement)
+        [FromBody] StatementResponseDto statement)
     {
         throw new NotImplementedException();
     }

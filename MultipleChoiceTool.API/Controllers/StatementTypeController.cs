@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MultipleChoiceTool.API.Dtos;
+using MultipleChoiceTool.API.Dtos.Responses;
 
 namespace MultipleChoiceTool.API.Controllers;
 
@@ -8,29 +8,29 @@ namespace MultipleChoiceTool.API.Controllers;
 public class StatementTypeController : ControllerBase
 {
     [HttpPut]
-    public Task<ActionResult<StatementTypeDto>> AddStatementTypeAsync(
-        [FromBody] StatementTypeDto statementType)
+    public Task<ActionResult<StatementTypeResponseDto>> AddStatementTypeAsync(
+        [FromBody] StatementTypeResponseDto statementType)
     {
         throw new NotImplementedException();
     }
 
     [HttpGet]
-    public Task<ActionResult<IEnumerable<StatementTypeDto>>> GetAllStatementTypesAsync()
+    public Task<ActionResult<IEnumerable<StatementTypeResponseDto>>> GetAllStatementTypesAsync()
     {
         throw new NotImplementedException();
     }
 
     [HttpGet("{statementTypeId}")]
-    public Task<ActionResult<StatementTypeDto>> GetStatementTypeByIdAsync(
+    public Task<ActionResult<StatementTypeResponseDto>> GetStatementTypeByIdAsync(
         [FromRoute] Guid statementTypeId)
     {
         throw new NotImplementedException();
     }
 
     [HttpPatch("{statementTypeId}")]
-    public Task<ActionResult<StatementTypeDto>> UpdateStatementTypeByIdAsync(
+    public Task<ActionResult<StatementTypeResponseDto>> UpdateStatementTypeByIdAsync(
         [FromRoute] Guid statementTypeId,
-        [FromBody] StatementTypeDto statementType)
+        [FromBody] StatementTypeResponseDto statementType)
     {
         throw new NotImplementedException();
     }

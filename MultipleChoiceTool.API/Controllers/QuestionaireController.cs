@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MultipleChoiceTool.API.Dtos;
+using MultipleChoiceTool.API.Dtos.Requests;
+using MultipleChoiceTool.API.Dtos.Responses;
 using MultipleChoiceTool.Core.Commands;
 using MultipleChoiceTool.Core.Models;
 using MultipleChoiceTool.Core.Queries;
@@ -24,27 +25,26 @@ public class QuestionaireController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<QuestionaireDto>> CreateQuestionaireAsync(
-        [FromBody] QuestionaireDto questionaire)
+    public async Task<ActionResult<QuestionaireResponseDto>> CreateQuestionaireAsync(
+        [FromBody] QuestionaireRequestDto questionaire)
     {
         var questionaireModel = _mapper.Map<QuestionaireModel>(questionaire);
-
         questionaireModel = await _mediator.Send(new CreateQuestionaireCommand(questionaireModel));
-        var questionaireDto = _mapper.Map<QuestionaireDto>(questionaireModel);
-        return Ok(questionaireDto);
 
+        var questionaireDto = _mapper.Map<QuestionaireResponseDto>(questionaireModel);
+        return Ok(questionaireDto);
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<QuestionaireDto>>> GetAllQuestionairesAsync()
+    public async Task<ActionResult<IEnumerable<QuestionaireResponseDto>>> GetAllQuestionairesAsync()
     {
         var questionaireModels = await _mediator.Send(new GetAllQuestionairesQuery());
-        var questionaireDtos = _mapper.Map<IEnumerable<QuestionaireDto>>(questionaireModels);
+        var questionaireDtos = _mapper.Map<IEnumerable<QuestionaireResponseDto>>(questionaireModels);
         return Ok(questionaireDtos);
     }
 
     [HttpGet("{questionaireId}")]
-    public async Task<ActionResult<QuestionaireModel>> GetQuestionaireByIdAsync(
+    public async Task<ActionResult<QuestionaireResponseDto>> GetQuestionaireByIdAsync(
         [FromRoute] Guid questionaireId)
     {
         var questionaireModel = await _mediator.Send(new GetQuestionaireByIdQuery(questionaireId));
@@ -53,14 +53,14 @@ public class QuestionaireController : ControllerBase
             return NotFound();
         }
 
-        var questionaireDto = _mapper.Map<QuestionaireModel>(questionaireModel);
+        var questionaireDto = _mapper.Map<QuestionaireResponseDto>(questionaireModel);
         return Ok(questionaireDto);
     }
 
     [HttpPatch("{questionaireId}")]
-    public async Task<ActionResult<QuestionaireModel>> UpdateQuestionaireAsync(
+    public async Task<ActionResult<QuestionaireResponseDto>> UpdateQuestionaireAsync(
         [FromRoute] Guid questionaireId,
-        [FromBody] QuestionaireDto questionaire)
+        [FromBody] QuestionaireRequestDto questionaire)
     {
         var questionaireModel = _mapper.Map<QuestionaireModel>(questionaire);
         questionaireModel = await _mediator.Send(new UpdateQuestionaireCommand(questionaireId, questionaireModel));
@@ -70,7 +70,7 @@ public class QuestionaireController : ControllerBase
             return NotFound();
         }
 
-        var questionaireDto = _mapper.Map<QuestionaireModel>(questionaireModel);
+        var questionaireDto = _mapper.Map<QuestionaireResponseDto>(questionaireModel);
         return Ok(questionaireDto);
     }
 

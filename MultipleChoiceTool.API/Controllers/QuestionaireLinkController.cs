@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MultipleChoiceTool.API.Dtos;
+using MultipleChoiceTool.API.Dtos.Responses;
 using MultipleChoiceTool.Core.Models;
 
 namespace MultipleChoiceTool.API.Controllers;
@@ -26,7 +26,7 @@ public class QuestionaireLinkController : ControllerBase
     public Task<ActionResult<QuestionaireLinkModel>> UpdateLinkAsync(
         [FromRoute] Guid questionaireId, 
         [FromRoute] Guid linkId, 
-        [FromBody] QuestionaireLinkDto link)
+        [FromBody] QuestionaireLinkResponseDto link)
     {
         throw new NotImplementedException();
     }
