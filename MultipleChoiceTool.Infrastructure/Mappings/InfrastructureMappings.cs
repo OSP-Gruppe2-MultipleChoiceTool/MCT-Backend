@@ -9,9 +9,9 @@ internal class InfrastructureMappings : Profile
     public InfrastructureMappings()
     {
         CreateMap<QuestionaireModel, QuestionaireEntity>()
-            .ForMember(q => q.QuestionaireLinks, opt => opt.MapFrom(src => src.Links))
+            .ForMember(entity => entity.QuestionaireLinks, opt => opt.MapFrom(src => src.Links))
             .ReverseMap()
-            .ForMember(q => q.Links, opt => opt.MapFrom(src => src.QuestionaireLinks));
+            .ForMember(model => model.Links, opt => opt.MapFrom(src => src.QuestionaireLinks));
 
         CreateMap<QuestionaireLinkModel, QuestionaireLinkEntity>()
             .ReverseMap();
