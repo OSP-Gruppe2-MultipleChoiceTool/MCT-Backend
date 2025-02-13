@@ -5,6 +5,7 @@ using MultipleChoiceTool.API.Dtos.Requests;
 using MultipleChoiceTool.API.Dtos.Responses;
 using MultipleChoiceTool.Core.Commands;
 using MultipleChoiceTool.Core.Models;
+using MultipleChoiceTool.Core.Queries;
 
 namespace MultipleChoiceTool.API.Controllers;
 
@@ -35,9 +36,11 @@ public class StatementTypeController : ControllerBase
     }
 
     [HttpGet]
-    public Task<ActionResult<IEnumerable<StatementTypeResponseDto>>> GetAllStatementTypesAsync()
+    public async Task<ActionResult<IEnumerable<StatementTypeResponseDto>>> GetAllStatementTypesAsync()
     {
-        throw new NotImplementedException();
+        var statementTypeModels = await _mediator.Send(new GetAllStatementTypesQuery());
+        var statementTypeDtos = _mapper.Map<IEnumerable<StatementTypeResponseDto>>(statementTypeModels);
+        return Ok(statementTypeDtos);
     }
 
     [HttpGet("{statementTypeId}")]
