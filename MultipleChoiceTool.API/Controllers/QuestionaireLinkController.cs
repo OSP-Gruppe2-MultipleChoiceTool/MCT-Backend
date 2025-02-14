@@ -5,6 +5,7 @@ using MultipleChoiceTool.API.Dtos.Requests;
 using MultipleChoiceTool.API.Dtos.Responses;
 using MultipleChoiceTool.Core.Commands;
 using MultipleChoiceTool.Core.Models;
+using MultipleChoiceTool.Core.Queries;
 
 namespace MultipleChoiceTool.API.Controllers;
 
@@ -36,26 +37,49 @@ public class QuestionaireLinkController : ControllerBase
     }
 
     [HttpGet]
-    public Task<ActionResult<IEnumerable<QuestionaireLinkResponseDto>>> GetAllLinksAsync(
+    public async Task<ActionResult<IEnumerable<QuestionaireLinkResponseDto>>> GetAllLinksAsync(
         [FromRoute] Guid questionaireId)
     {
-        throw new NotImplementedException();
+        var linkModels = await _mediator.Send(new GetAllLinksQuery(questionaireId));
+        if (linkModels == null)
+        {
+            return NotFound();
+        }
+
+        var linkDtos = _mapper.Map<IEnumerable<QuestionaireLinkResponseDto>>(linkModels);
+        return Ok(linkDtos);
     }
 
     [HttpPatch("{linkId}")]
-    public Task<ActionResult<QuestionaireLinkResponseDto>> UpdateLinkAsync(
+    public async Task<ActionResult<QuestionaireLinkResponseDto>> UpdateLinkAsync(
         [FromRoute] Guid questionaireId, 
         [FromRoute] Guid linkId, 
         [FromBody] QuestionaireLinkRequestDto link)
     {
-        throw new NotImplementedException();
+        var linkModel = _mapper.Map<QuestionaireLinkModel>(link);
+        linkModel = await _mediator.Send(new UpdateLinkCommand(linkId, linkModel));
+
+        if (linkModel == null)
+        {
+            return NotFound();
+        }
+
+        var linkDto = _mapper.Map<QuestionaireLinkResponseDto>(linkModel);
+        return Ok(linkDto);
     }
 
     [HttpDelete("{linkId}")]
-    public Task<ActionResult> DeleteLinkAsync(
+    public async Task<ActionResult> DeleteLinkAsync(
         [FromRoute] Guid questionaireId,
         [FromRoute] Guid linkId)
     {
-        throw new NotImplementedException();
+        var linkModel = await _mediator.Send(new DeleteLinkCommand(linkId));
+        if (linkModel == null)
+        {
+            return NotFound();
+        }
+
+        var linkDto = _mapper.Map<QuestionaireLinkResponseDto>(linkModel);
+        return Ok(linkDto);
     }
 }
