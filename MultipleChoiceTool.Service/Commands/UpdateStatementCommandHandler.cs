@@ -26,15 +26,14 @@ internal class UpdateStatementCommandHandler : IRequestHandler<UpdateStatementCo
             return null;
         }
 
-        if (!string.IsNullOrWhiteSpace(request.Statement.Content))
+        if (!string.IsNullOrWhiteSpace(request.Content))
         {
-            statement.Content = request.Statement.Content;
+            statement.Content = request.Content;
         }
 
-        // TODO: Restructure project to support this
-        if (request.Statement.IsCorrect != null)
+        if (request.IsCorrect != null)
         {
-            statement.IsCorrect = request.Statement.IsCorrect;
+            statement.IsCorrect = (bool)request.IsCorrect;
         }
 
         return await _statementWriteRepository.UpdateAsync(statement, cancellationToken);

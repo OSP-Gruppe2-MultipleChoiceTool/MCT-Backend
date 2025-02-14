@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using MultipleChoiceTool.API.Dtos.Requests;
 using MultipleChoiceTool.API.Dtos.Responses;
 using MultipleChoiceTool.Core.Commands;
-using MultipleChoiceTool.Core.Models;
 
 namespace MultipleChoiceTool.API.Controllers;
 
@@ -27,11 +26,9 @@ public class StatementController : ControllerBase
     public async Task<ActionResult<StatementResponseDto>> AddStatementAsync(
         [FromRoute] Guid questionaireId,
         [FromRoute] Guid statementSetId,
-        [FromBody] StatementRequestDto statement)
+        [FromBody] CreateStatementRequestDto request)
     {
-        var statementModel = _mapper.Map<StatementModel>(statement);
-        statementModel = await _mediator.Send(new CreateStatementCommand(statementSetId, statementModel));
-
+        var statementModel = await _mediator.Send(new CreateStatementCommand(statementSetId, request.IsCorrect, request.Statement));
         if (statementModel == null)
         {
             return NotFound();
@@ -46,11 +43,9 @@ public class StatementController : ControllerBase
         [FromRoute] Guid questionaireId,
         [FromRoute] Guid statementSetId,
         [FromRoute] Guid statementId,
-        [FromBody] StatementRequestDto statement)
+        [FromBody] UpdateStatementRequestDto request)
     {
-        var statementModel = _mapper.Map<StatementModel>(statement);
-        statementModel = await _mediator.Send(new UpdateStatementCommand(statementId, statementModel));
-
+        var statementModel = await _mediator.Send(new UpdateStatementCommand(statementId, request.IsCorrect, request.Statement));
         if (statementModel == null)
         {
             return NotFound();

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MultipleChoiceTool.API.Dtos.Requests;
 using MultipleChoiceTool.API.Dtos.Responses;
 using MultipleChoiceTool.Core.Models;
 
@@ -9,16 +8,10 @@ public class ApiMappings : Profile
 {
     public ApiMappings()
     {
+        CreateMap<QuestionaireLinkModel, QuestionaireLinkResponseDto>();
         CreateMap<QuestionaireModel, QuestionaireResponseDto>();
-        CreateMap<QuestionaireRequestDto, QuestionaireModel>();
-
-        CreateMap<StatementSetModel, StatementSetResponseDto>();
-        CreateMap<StatementSetRequestDto, StatementSetModel>();
-
         CreateMap<StatementModel, StatementResponseDto>();
-        CreateMap<StatementRequestDto, StatementModel>();
-
+        CreateMap<StatementSetModel, StatementSetResponseDto>();
         CreateMap<StatementTypeModel, StatementTypeResponseDto>();
-        CreateMap<StatementTypeRequestDto, StatementTypeModel>();
     }
 }

@@ -4,6 +4,8 @@ using MultipleChoiceTool.Core.Models;
 namespace MultipleChoiceTool.Core.Commands;
 
 public record CreateStatementSetCommand(
-    Guid QuestionaireId, 
-    StatementSetModel StatementSet
+    Guid QuestionaireId,
+    string? Explaination,
+    string? StatementImage,
+    Guid? StatementTypeId
 ) : IRequest<StatementSetModel?>;

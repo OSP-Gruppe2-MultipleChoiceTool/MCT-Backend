@@ -1,6 +1,6 @@
 ﻿namespace MultipleChoiceTool.API.Dtos.Requests;
 
-public record StatementSetRequestDto
+public record UpdateStatementSetRequestDto
 {
     public string? Explaination { get; init; }
 

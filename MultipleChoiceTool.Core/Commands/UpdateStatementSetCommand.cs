@@ -5,5 +5,7 @@ namespace MultipleChoiceTool.Core.Commands;
 
 public record UpdateStatementSetCommand(
     Guid StatementSetId,
-    StatementSetModel StatementSet
+    string? Explaination,
+    string? StatementImage,
+    Guid? StatementTypeId
 ) : IRequest<StatementSetModel?>;

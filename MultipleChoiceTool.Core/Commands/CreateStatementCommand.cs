@@ -5,5 +5,6 @@ namespace MultipleChoiceTool.Core.Commands;
 
 public record CreateStatementCommand(
     Guid StatementSetId,
-    StatementModel Statement
+    bool IsCorrect,
+    string Content
 ) : IRequest<StatementModel?>;

@@ -33,8 +33,7 @@ internal class EFBaseWriteRepository<TEntity, TModel> : IBaseWriteRepository<TMo
         var entity = _mapper.Map<TEntity>(model);
         _dbContext.Set<TEntity>().Remove(entity);
         await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return await FindInsertedEntity(entity, cancellationToken);
+        return _mapper.Map<TModel>(entity);
     }
 
     public async Task<TModel> UpdateAsync(TModel model, CancellationToken cancellationToken = default)

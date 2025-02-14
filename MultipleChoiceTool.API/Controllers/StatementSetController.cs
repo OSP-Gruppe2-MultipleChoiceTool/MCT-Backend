@@ -27,10 +27,10 @@ public class StatementSetController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<StatementSetResponseDto>> CreateStatementSetAsync(
         [FromRoute] Guid questionaireId,
-        [FromBody] StatementSetRequestDto statementSet)
+        [FromBody] CreateStatementSetRequestDto request)
     {
-        var statementSetModel = _mapper.Map<StatementSetModel>(statementSet);
-        statementSetModel = await _mediator.Send(new CreateStatementSetCommand(questionaireId, statementSetModel));
+        var statementSetModel = await _mediator.Send(new CreateStatementSetCommand(
+            questionaireId, request.Explaination, request.StatementImage, request.StatementTypeId));
         
         if (statementSetModel == null)
         {
@@ -59,10 +59,10 @@ public class StatementSetController : ControllerBase
     public async Task<ActionResult<IEnumerable<StatementSetResponseDto>>> UpdateStatementSetAsync(
         [FromRoute] Guid questionaireId,
         [FromRoute] Guid statementSetId,
-        [FromBody] StatementSetRequestDto statementSet)
+        [FromBody] UpdateStatementSetRequestDto request)
     {
-        var statementSetModel = _mapper.Map<StatementSetModel>(statementSet);
-        statementSetModel = await _mediator.Send(new UpdateStatementSetCommand(statementSetId, statementSetModel));
+        var statementSetModel = await _mediator.Send(new UpdateStatementSetCommand(
+            statementSetId, request.Explaination, request.StatementImage, request.StatementTypeId));
 
         if (statementSetModel == null)
         {
@@ -78,7 +78,7 @@ public class StatementSetController : ControllerBase
         [FromRoute] Guid questionaireId,
         [FromRoute] Guid statementSetId)
     {
-        var questionaireModel = await _mediator.Send(new DeleteStatementSetCommand(questionaireId, statementSetId));
+        var questionaireModel = await _mediator.Send(new DeleteStatementSetCommand(statementSetId));
         if (questionaireModel == null)
         {
             return NotFound();

@@ -1,27 +1,26 @@
 ﻿using MediatR;
 using MultipleChoiceTool.Core.Commands;
 using MultipleChoiceTool.Core.Models;
-using MultipleChoiceTool.Core.Queries;
 using MultipleChoiceTool.Core.Repositories;
 
 namespace MultipleChoiceTool.Service.Commands;
 
 internal class DeleteStatementTypeCommandHandler : IRequestHandler<DeleteStatementTypeCommand, StatementTypeModel?>
 {
+    private readonly IBaseReadRepository<StatementTypeModel> _statementTypeReadRepository;
     private readonly IBaseWriteRepository<StatementTypeModel> _statementTypeWriteRepository;
-    private readonly IMediator _mediator;
 
     public DeleteStatementTypeCommandHandler(
-        IBaseWriteRepository<StatementTypeModel> statementTypeWriteRepository,
-        IMediator mediator)
+        IBaseReadRepository<StatementTypeModel> statementTypeReadRepository,
+        IBaseWriteRepository<StatementTypeModel> statementTypeWriteRepository)
     {
+        _statementTypeReadRepository = statementTypeReadRepository;
         _statementTypeWriteRepository = statementTypeWriteRepository;
-        _mediator = mediator;
     }
 
     public async Task<StatementTypeModel?> Handle(DeleteStatementTypeCommand request, CancellationToken cancellationToken)
     {
-        var statementType = await _mediator.Send(new GetStatementTypeByIdQuery(request.StatementTypeId));
+        var statementType = await _statementTypeReadRepository.FindByIdAsync(request.StatementTypeId, cancellationToken);
         if (statementType == null)
         {
             return null;

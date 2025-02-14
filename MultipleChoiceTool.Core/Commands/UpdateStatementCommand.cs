@@ -5,5 +5,6 @@ namespace MultipleChoiceTool.Core.Commands;
 
 public record UpdateStatementCommand(
     Guid StatementId,
-    StatementModel Statement
+    bool? IsCorrect,
+    string? Content
 ) : IRequest<StatementModel?>;

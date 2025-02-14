@@ -26,21 +26,21 @@ internal class UpdateStatementSetCommandHandler : IRequestHandler<UpdateStatemen
             return null;
         }
 
-        if (request.StatementSet.StatementTypeId != null)
+        if (request.StatementTypeId != null)
         {
-            statementSet.StatementTypeId = request.StatementSet.StatementTypeId;
+            statementSet.StatementTypeId = request.StatementTypeId;
         }
 
-        if (!string.IsNullOrWhiteSpace(request.StatementSet.Explaination))
+        if (!string.IsNullOrWhiteSpace(request.Explaination))
         {
-            statementSet.Explaination = request.StatementSet.Explaination;
+            statementSet.Explaination = request.Explaination;
         }
 
-        if (!string.IsNullOrWhiteSpace(request.StatementSet.StatementImage))
+        if (!string.IsNullOrWhiteSpace(request.StatementImage))
         {
-            statementSet.StatementImage = request.StatementSet.StatementImage;
+            statementSet.StatementImage = request.StatementImage;
         }
 
-        return await _statementSetWriteRepository.UpdateAsync(request.StatementSet, cancellationToken);
+        return await _statementSetWriteRepository.UpdateAsync(statementSet, cancellationToken);
     }
 }
