@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using MultipleChoiceTool.API.Dtos.Requests;
 using MultipleChoiceTool.API.Dtos.Responses;
-using MultipleChoiceTool.Core.Models;
+using MultipleChoiceTool.Core.Commands;
 
 namespace MultipleChoiceTool.API.Controllers;
 
@@ -8,31 +11,62 @@ namespace MultipleChoiceTool.API.Controllers;
 [Route("api/questionaires/{questionaireId}/statement-sets/{statementSetId}/statements")]
 public class StatementController : ControllerBase
 {
+    private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
+
+    public StatementController(
+        IMediator mediator,
+        IMapper mapper)
+    {
+        _mediator = mediator;
+        _mapper = mapper;
+    }
+
     [HttpPut]
-    public Task<ActionResult<StatementModel>> AddStatementAsync(
+    public async Task<ActionResult<StatementResponseDto>> AddStatementAsync(
         [FromRoute] Guid questionaireId,
         [FromRoute] Guid statementSetId,
-        [FromBody] StatementResponseDto statement)
+        [FromBody] CreateStatementRequestDto request)
     {
-        throw new NotImplementedException();
+        var statementModel = await _mediator.Send(new CreateStatementCommand(statementSetId, request.IsCorrect, request.Statement));
+        if (statementModel == null)
+        {
+            return NotFound();
+        }
+
+        var statementDto = _mapper.Map<StatementResponseDto>(statementModel);
+        return Ok(statementDto);
     }
 
     [HttpPatch("{statementId}")]
-    public Task<ActionResult<StatementModel>> UpdateStatementAsync(
+    public async Task<ActionResult<StatementResponseDto>> UpdateStatementAsync(
         [FromRoute] Guid questionaireId,
         [FromRoute] Guid statementSetId,
         [FromRoute] Guid statementId,
-        [FromBody] StatementResponseDto statement)
+        [FromBody] UpdateStatementRequestDto request)
     {
-        throw new NotImplementedException();
+        var statementModel = await _mediator.Send(new UpdateStatementCommand(statementId, request.IsCorrect, request.Statement));
+        if (statementModel == null)
+        {
+            return NotFound();
+        }
+
+        var statementDto = _mapper.Map<StatementResponseDto>(statementModel);
+        return Ok(statementDto);
     }
 
     [HttpDelete("{statementId}")]
-    public Task<ActionResult> DeleteStatementAsync(
+    public async Task<ActionResult> DeleteStatementAsync(
         [FromRoute] Guid questionaireId,
         [FromRoute] Guid statementSetId,
         [FromRoute] Guid statementId)
     {
-        throw new NotImplementedException();
+        var statementModel = await _mediator.Send(new DeleteStatementCommand(statementId));
+        if (statementModel == null)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
     }
 }

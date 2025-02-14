@@ -16,13 +16,8 @@ public static class ServiceExtensions
     {
         services.AddAutoMapper(typeof(InfrastructureMappings));
 
-        services.AddEFBaseRepository<QuestionaireEntity, QuestionaireModel>();
-        services.AddEFBaseRepository<QuestionaireLinkEntity, QuestionaireLinkModel>();
-        services.AddEFBaseRepository<StatementEntity, StatementModel>();
-        services.AddEFBaseRepository<StatementSetEntity, StatementSetModel>();
-
-        services.AddEFBaseRepository<StatementTypeEntity, StatementTypeModel>();
-        services.AddScoped<IStatementTypeReadRepository, EFStatementTypeReadRepository>();
+        services.AddEFBaseRepositories();
+        services.AddSpecialEFRepositories();
     }
 
     public static void AddSqliteDbInfrastructure(this IServiceCollection services, 
@@ -37,6 +32,21 @@ public static class ServiceExtensions
     {
         var connectionString = configuration.GetRequiredConnectionString(connectionStringName);
         services.AddDbContext<DbContext, SqlServerDbContext>(options => options.UseSqlServer(connectionString));
+    }
+
+    private static void AddSpecialEFRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IStatementReadRepository, EFStatementReadRepository>();
+        services.AddScoped<IStatementTypeReadRepository, EFStatementTypeReadRepository>();
+    }
+
+    private static void AddEFBaseRepositories(this IServiceCollection services)
+    {
+        services.AddEFBaseRepository<QuestionaireEntity, QuestionaireModel>();
+        services.AddEFBaseRepository<QuestionaireLinkEntity, QuestionaireLinkModel>();
+        services.AddEFBaseRepository<StatementTypeEntity, StatementTypeModel>();
+        services.AddEFBaseRepository<StatementSetEntity, StatementSetModel>();
+        services.AddEFBaseRepository<StatementEntity, StatementModel>();
     }
 
     private static void AddEFBaseRepository<TEntity, TModel>(this IServiceCollection services)

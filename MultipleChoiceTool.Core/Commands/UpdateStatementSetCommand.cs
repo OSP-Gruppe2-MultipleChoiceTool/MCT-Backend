@@ -3,8 +3,8 @@ using MultipleChoiceTool.Core.Models;
 
 namespace MultipleChoiceTool.Core.Commands;
 
-public record CreateStatementSetCommand(
-    Guid QuestionaireId,
+public record UpdateStatementSetCommand(
+    Guid StatementSetId,
     string? Explaination,
     string? StatementImage,
     Guid? StatementTypeId

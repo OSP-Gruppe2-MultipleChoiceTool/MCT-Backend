@@ -5,5 +5,5 @@ namespace MultipleChoiceTool.Core.Commands;
 
 public record UpdateStatementTypeCommand(
     Guid StatementTypeId,
-    StatementTypeModel StatementType
+    string? Title
 ) : IRequest<StatementTypeModel?>;

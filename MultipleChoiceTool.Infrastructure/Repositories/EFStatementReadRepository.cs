@@ -1,0 +1,25 @@
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using MultipleChoiceTool.Core.Models;
+using MultipleChoiceTool.Core.Repositories;
+using MultipleChoiceTool.Infrastructure.Entities;
+
+namespace MultipleChoiceTool.Infrastructure.Repositories;
+
+internal class EFStatementReadRepository : EFBaseReadRepository<StatementEntity, StatementModel>, IStatementReadRepository
+{
+    public EFStatementReadRepository(
+        DbContext dbContext, 
+        IMapper mapper) 
+        : base(dbContext, mapper)
+    {
+    }
+
+    public async Task<StatementModel?> FindStatementByContentAsync(string content, CancellationToken cancellationToken = default)
+    {
+        var entity = await _dbContext.Set<StatementEntity>()
+            .FirstOrDefaultAsync(x => x.Statement == content, cancellationToken);
+
+        return _mapper.Map<StatementModel?>(entity);
+    }
+}

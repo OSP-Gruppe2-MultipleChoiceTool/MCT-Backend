@@ -1,6 +1,6 @@
 ﻿namespace MultipleChoiceTool.API.Dtos.Requests;
 
-public record StatementTypeRequestDto
+public record CreateStatementTypeRequestDto
 {
     public string Title { get; init; } = null!;
 }

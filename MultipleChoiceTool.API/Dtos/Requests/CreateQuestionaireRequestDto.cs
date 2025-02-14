@@ -1,6 +1,6 @@
 ﻿namespace MultipleChoiceTool.API.Dtos.Requests;
 
-public record QuestionaireRequestDto
+public record CreateQuestionaireRequestDto
 {
     public string Title { get; init; } = null!;
 }

@@ -5,5 +5,5 @@ namespace MultipleChoiceTool.Core.Commands;
 
 public record UpdateQuestionaireCommand(
     Guid QuestionaireId, 
-    QuestionaireModel Questionaire
+    string? Title
 ) : IRequest<QuestionaireModel?>;

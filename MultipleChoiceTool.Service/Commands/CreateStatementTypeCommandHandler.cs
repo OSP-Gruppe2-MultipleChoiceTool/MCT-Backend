@@ -20,7 +20,13 @@ internal class CreateStatementTypeCommandHandler : IRequestHandler<CreateStateme
 
     public async Task<StatementTypeModel> Handle(CreateStatementTypeCommand request, CancellationToken cancellationToken)
     {
-        var statementModel = await _statementTypeReadRepository.FindStatementTypeByTitleAsync(request.StatementType.Title, cancellationToken);
-        return statementModel ?? await _statementTypeWriteRepository.CreateAsync(request.StatementType, cancellationToken);
+        var statementModel = await _statementTypeReadRepository.FindStatementTypeByTitleAsync(request.Title, cancellationToken);
+        if (statementModel != null)
+        {
+            return statementModel;
+        }
+
+        var statementType = new StatementTypeModel(request.Title);
+        return await _statementTypeWriteRepository.CreateAsync(statementType, cancellationToken);
     }
 }
