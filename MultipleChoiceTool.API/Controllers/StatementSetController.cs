@@ -24,7 +24,6 @@ public class StatementSetController : ControllerBase
         _mapper = mapper;
     }
 
-
     [HttpPost]
     public async Task<ActionResult<StatementSetResponseDto>> CreateStatementSetAsync(
         [FromRoute] Guid questionaireId,
@@ -35,7 +34,7 @@ public class StatementSetController : ControllerBase
         
         if (statementSetModel == null)
         {
-            return BadRequest();
+            return NotFound();
         }
 
         var statementSetDto = _mapper.Map<StatementSetResponseDto>(statementSetModel);
@@ -51,7 +50,27 @@ public class StatementSetController : ControllerBase
         {
             return NotFound();
         }
-        return Ok(_mapper.Map<IEnumerable<StatementSetResponseDto>>(statementSetModels));
+
+        var statementSetDtos = _mapper.Map<IEnumerable<StatementSetResponseDto>>(statementSetModels);
+        return Ok(statementSetDtos);
+    }
+
+    [HttpPatch("{statementSetId}")]
+    public async Task<ActionResult<IEnumerable<StatementSetResponseDto>>> UpdateStatementSetAsync(
+        [FromRoute] Guid questionaireId,
+        [FromRoute] Guid statementSetId,
+        [FromBody] StatementSetRequestDto statementSet)
+    {
+        var statementSetModel = _mapper.Map<StatementSetModel>(statementSet);
+        statementSetModel = await _mediator.Send(new UpdateStatementSetCommand(statementSetId, statementSetModel));
+
+        if (statementSetModel == null)
+        {
+            return NotFound();
+        }
+
+        var statementSetDto = _mapper.Map<StatementSetResponseDto>(statementSetModel);
+        return Ok(statementSetDto);
     }
 
     [HttpDelete("{statementSetId}")]
@@ -64,6 +83,7 @@ public class StatementSetController : ControllerBase
         {
             return NotFound();
         }
+
         return Ok();
     }
 }

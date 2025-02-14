@@ -7,6 +7,7 @@ public record StatementSetModel
     public Guid QuestionaireId { get; set; }
 
     public Guid? StatementTypeId { get; set; }
+    public StatementTypeModel? StatementType { get; init; }
 
     public string? Explaination { get; set; }
 

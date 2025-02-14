@@ -15,6 +15,9 @@ public class ApiMappings : Profile
         CreateMap<StatementSetModel, StatementSetResponseDto>();
         CreateMap<StatementSetRequestDto, StatementSetModel>();
 
+        CreateMap<StatementModel, StatementResponseDto>();
+        CreateMap<StatementRequestDto, StatementModel>();
+
         CreateMap<StatementTypeModel, StatementTypeResponseDto>();
         CreateMap<StatementTypeRequestDto, StatementTypeModel>();
     }

@@ -18,8 +18,10 @@ public static class ServiceExtensions
 
         services.AddEFBaseRepository<QuestionaireEntity, QuestionaireModel>();
         services.AddEFBaseRepository<QuestionaireLinkEntity, QuestionaireLinkModel>();
-        services.AddEFBaseRepository<StatementEntity, StatementModel>();
         services.AddEFBaseRepository<StatementSetEntity, StatementSetModel>();
+
+        services.AddEFBaseRepository<StatementEntity, StatementModel>();
+        services.AddScoped<IStatementReadRepository, EFStatementReadRepository>();
 
         services.AddEFBaseRepository<StatementTypeEntity, StatementTypeModel>();
         services.AddScoped<IStatementTypeReadRepository, EFStatementTypeReadRepository>();
