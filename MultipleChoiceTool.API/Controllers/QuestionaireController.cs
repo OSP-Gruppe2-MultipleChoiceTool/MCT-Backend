@@ -67,7 +67,7 @@ public class QuestionaireController : ControllerBase
         
         if (questionaireModel == null)
         {
-            return BadRequest();
+            return NotFound();
         }
 
         var questionaireDto = _mapper.Map<QuestionaireResponseDto>(questionaireModel);

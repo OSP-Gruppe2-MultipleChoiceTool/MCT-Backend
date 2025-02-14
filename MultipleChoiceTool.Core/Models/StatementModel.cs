@@ -6,7 +6,7 @@ public record StatementModel
 
     public bool IsCorrect { get; set; }
 
-    public string Statement { get; set; } = null!;
+    public string Content { get; set; } = null!;
 
     public Guid StatementSetId { get; set; }
 }

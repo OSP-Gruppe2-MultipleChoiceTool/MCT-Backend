@@ -26,9 +26,9 @@ internal class UpdateStatementCommandHandler : IRequestHandler<UpdateStatementCo
             return null;
         }
 
-        if (!string.IsNullOrWhiteSpace(request.Statement.Statement))
+        if (!string.IsNullOrWhiteSpace(request.Statement.Content))
         {
-            statement.Statement = request.Statement.Statement;
+            statement.Content = request.Statement.Content;
         }
 
         // TODO: Restructure project to support this

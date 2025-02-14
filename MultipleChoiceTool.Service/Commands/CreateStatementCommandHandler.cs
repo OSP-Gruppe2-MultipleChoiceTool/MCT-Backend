@@ -23,7 +23,7 @@ internal class CreateStatementCommandHandler : IRequestHandler<CreateStatementCo
 
     public async Task<StatementModel?> Handle(CreateStatementCommand request, CancellationToken cancellationToken)
     {
-        var statement = await _statementReadRepository.FindStatementByContentAsync(request.Statement.Statement, cancellationToken);
+        var statement = await _statementReadRepository.FindStatementByContentAsync(request.Statement.Content, cancellationToken);
         if (statement != null)
         {
             return statement;
