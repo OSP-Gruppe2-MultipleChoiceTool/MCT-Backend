@@ -3,7 +3,7 @@ using MultipleChoiceTool.Core.Models;
 
 namespace MultipleChoiceTool.Core.Commands;
 
-public record UpdateQuestionaireCommand(
-    Guid QuestionaireId, 
+public record UpdateStatementTypeCommand(
+    Guid StatementTypeId,
     string? Title
-) : IRequest<QuestionaireModel?>;
+) : IRequest<StatementTypeModel?>;

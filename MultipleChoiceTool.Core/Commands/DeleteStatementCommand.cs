@@ -3,4 +3,4 @@ using MultipleChoiceTool.Core.Models;
 
 namespace MultipleChoiceTool.Core.Commands;
 
-public record CreateQuestionaireCommand(string Title) : IRequest<QuestionaireModel>;
+public record DeleteStatementCommand(Guid StatementId) : IRequest<StatementModel?>;

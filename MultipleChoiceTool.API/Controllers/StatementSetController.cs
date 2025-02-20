@@ -5,6 +5,7 @@ using MultipleChoiceTool.API.Dtos.Requests;
 using MultipleChoiceTool.API.Dtos.Responses;
 using MultipleChoiceTool.Core.Commands;
 using MultipleChoiceTool.Core.Models;
+using MultipleChoiceTool.Core.Queries;
 
 namespace MultipleChoiceTool.API.Controllers;
 
@@ -23,14 +24,13 @@ public class StatementSetController : ControllerBase
         _mapper = mapper;
     }
 
-
     [HttpPost]
     public async Task<ActionResult<StatementSetResponseDto>> CreateStatementSetAsync(
         [FromRoute] Guid questionaireId,
-        [FromBody] StatementSetRequestDto statementSet)
+        [FromBody] CreateStatementSetRequestDto request)
     {
-        var statementSetModel = _mapper.Map<StatementSetModel>(statementSet);
-        statementSetModel = await _mediator.Send(new CreateStatementSetCommand(questionaireId, statementSetModel));
+        var statementSetModel = await _mediator.Send(new CreateStatementSetCommand(
+            questionaireId, request.Explaination, request.StatementImage, request.StatementTypeId));
         
         if (statementSetModel == null)
         {
@@ -42,17 +42,48 @@ public class StatementSetController : ControllerBase
     }
 
     [HttpGet]
-    public Task<ActionResult<IEnumerable<StatementSetResponseDto>>> GetAllStatementSetsAsync(
+    public async Task<ActionResult<IEnumerable<StatementSetResponseDto>>> GetAllStatementSetsAsync(
         [FromRoute] Guid questionaireId)
     {
-        throw new NotImplementedException();
+        var statementSetModels = await _mediator.Send(new GetAllStatementSetsQuery(questionaireId));
+        if (statementSetModels == null)
+        {
+            return NotFound();
+        }
+
+        var statementSetDtos = _mapper.Map<IEnumerable<StatementSetResponseDto>>(statementSetModels);
+        return Ok(statementSetDtos);
+    }
+
+    [HttpPatch("{statementSetId}")]
+    public async Task<ActionResult<IEnumerable<StatementSetResponseDto>>> UpdateStatementSetAsync(
+        [FromRoute] Guid questionaireId,
+        [FromRoute] Guid statementSetId,
+        [FromBody] UpdateStatementSetRequestDto request)
+    {
+        var statementSetModel = await _mediator.Send(new UpdateStatementSetCommand(
+            statementSetId, request.Explaination, request.StatementImage, request.StatementTypeId));
+
+        if (statementSetModel == null)
+        {
+            return NotFound();
+        }
+
+        var statementSetDto = _mapper.Map<StatementSetResponseDto>(statementSetModel);
+        return Ok(statementSetDto);
     }
 
     [HttpDelete("{statementSetId}")]
-    public Task<ActionResult> DeleteStatementSetAsync(
+    public async Task<ActionResult> DeleteStatementSetAsync(
         [FromRoute] Guid questionaireId,
         [FromRoute] Guid statementSetId)
     {
-        throw new NotImplementedException();
+        var questionaireModel = await _mediator.Send(new DeleteStatementSetCommand(statementSetId));
+        if (questionaireModel == null)
+        {
+            return NotFound();
+        }
+
+        return Ok();
     }
 }

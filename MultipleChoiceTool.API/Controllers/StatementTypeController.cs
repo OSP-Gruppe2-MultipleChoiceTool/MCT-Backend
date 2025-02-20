@@ -1,5 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using MultipleChoiceTool.API.Dtos.Requests;
 using MultipleChoiceTool.API.Dtos.Responses;
+using MultipleChoiceTool.Core.Commands;
+using MultipleChoiceTool.Core.Models;
+using MultipleChoiceTool.Core.Queries;
 
 namespace MultipleChoiceTool.API.Controllers;
 
@@ -7,38 +13,73 @@ namespace MultipleChoiceTool.API.Controllers;
 [Route("api/statement-types")]
 public class StatementTypeController : ControllerBase
 {
-    [HttpPut]
-    public Task<ActionResult<StatementTypeResponseDto>> AddStatementTypeAsync(
-        [FromBody] StatementTypeResponseDto statementType)
+    private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
+
+    public StatementTypeController(
+        IMediator mediator,
+        IMapper mapper)
     {
-        throw new NotImplementedException();
+        _mediator = mediator;
+        _mapper = mapper;
+    }
+
+    [HttpPut]
+    public async Task<ActionResult<StatementTypeResponseDto>> AddStatementTypeAsync(
+        [FromBody] CreateStatementTypeRequestDto request)
+    {
+        var statementTypeModel = await _mediator.Send(new CreateStatementTypeCommand(request.Title));
+        var statementTypeDto = _mapper.Map<StatementTypeResponseDto>(statementTypeModel);
+        return Ok(statementTypeDto);
     }
 
     [HttpGet]
-    public Task<ActionResult<IEnumerable<StatementTypeResponseDto>>> GetAllStatementTypesAsync()
+    public async Task<ActionResult<IEnumerable<StatementTypeResponseDto>>> GetAllStatementTypesAsync()
     {
-        throw new NotImplementedException();
+        var statementTypeModels = await _mediator.Send(new GetAllStatementTypesQuery());
+        var statementTypeDtos = _mapper.Map<IEnumerable<StatementTypeResponseDto>>(statementTypeModels);
+        return Ok(statementTypeDtos);
     }
 
     [HttpGet("{statementTypeId}")]
-    public Task<ActionResult<StatementTypeResponseDto>> GetStatementTypeByIdAsync(
+    public async Task<ActionResult<StatementTypeResponseDto>> GetStatementTypeByIdAsync(
         [FromRoute] Guid statementTypeId)
     {
-        throw new NotImplementedException();
+        var statementTypeModel = await _mediator.Send(new GetStatementTypeByIdQuery(statementTypeId));
+        if (statementTypeModel == null)
+        {
+            return NotFound();
+        }
+
+        var statementTypeDto = _mapper.Map<StatementTypeResponseDto>(statementTypeModel);
+        return Ok(statementTypeDto);
     }
 
     [HttpPatch("{statementTypeId}")]
-    public Task<ActionResult<StatementTypeResponseDto>> UpdateStatementTypeByIdAsync(
+    public async Task<ActionResult<StatementTypeResponseDto>> UpdateStatementTypeByIdAsync(
         [FromRoute] Guid statementTypeId,
-        [FromBody] StatementTypeResponseDto statementType)
+        [FromBody] UpdateStatementTypeRequestDto request)
     {
-        throw new NotImplementedException();
+        var statementTypeModel = await _mediator.Send(new UpdateStatementTypeCommand(statementTypeId, request.Title));
+        if (statementTypeModel == null)
+        {
+            return NotFound();
+        }
+
+        var statementTypeDto = _mapper.Map<StatementTypeResponseDto>(statementTypeModel);
+        return Ok(statementTypeDto);
     }
 
     [HttpDelete("{statementTypeId}")]
-    public Task<ActionResult> DeleteStatementTypeByIdAsync(
+    public async Task<ActionResult> DeleteStatementTypeByIdAsync(
         [FromRoute] Guid statementTypeId)
     {
-        throw new NotImplementedException();
+        var statementTypeModel = await _mediator.Send(new DeleteStatementTypeCommand(statementTypeId));
+        if (statementTypeModel == null)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
     }
 }

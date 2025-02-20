@@ -17,7 +17,9 @@ internal class InfrastructureMappings : Profile
             .ReverseMap();
         
         CreateMap<StatementModel, StatementEntity>()
-            .ReverseMap();
+            .ForMember(entity => entity.Statement, opt => opt.MapFrom(src => src.Content))
+            .ReverseMap()
+            .ForMember(model => model.Content, opt => opt.MapFrom(src => src.Statement));
 
         CreateMap<StatementSetModel, StatementSetEntity>()
             .ReverseMap();

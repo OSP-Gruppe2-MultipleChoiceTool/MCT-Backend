@@ -26,11 +26,9 @@ public class QuestionaireController : ControllerBase
 
     [HttpPost]
     public async Task<ActionResult<QuestionaireResponseDto>> CreateQuestionaireAsync(
-        [FromBody] QuestionaireRequestDto questionaire)
+        [FromBody] CreateQuestionaireRequestDto request)
     {
-        var questionaireModel = _mapper.Map<QuestionaireModel>(questionaire);
-        questionaireModel = await _mediator.Send(new CreateQuestionaireCommand(questionaireModel));
-
+        var questionaireModel = await _mediator.Send(new CreateQuestionaireCommand(request.Title));
         var questionaireDto = _mapper.Map<QuestionaireResponseDto>(questionaireModel);
         return Ok(questionaireDto);
     }
@@ -60,10 +58,9 @@ public class QuestionaireController : ControllerBase
     [HttpPatch("{questionaireId}")]
     public async Task<ActionResult<QuestionaireResponseDto>> UpdateQuestionaireAsync(
         [FromRoute] Guid questionaireId,
-        [FromBody] QuestionaireRequestDto questionaire)
+        [FromBody] UpdateQuestionaireRequestDto request)
     {
-        var questionaireModel = _mapper.Map<QuestionaireModel>(questionaire);
-        questionaireModel = await _mediator.Send(new UpdateQuestionaireCommand(questionaireId, questionaireModel));
+        var questionaireModel = await _mediator.Send(new UpdateQuestionaireCommand(questionaireId, request.Title));
         
         if (questionaireModel == null)
         {
@@ -84,7 +81,7 @@ public class QuestionaireController : ControllerBase
             return NotFound();
         }
 
-        return Ok();
+        return NoContent();
     }
 
     [HttpGet("{questionaireId}/export")]
