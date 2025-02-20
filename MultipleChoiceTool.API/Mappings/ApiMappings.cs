@@ -10,7 +10,8 @@ public class ApiMappings : Profile
     {
         CreateMap<QuestionaireLinkModel, QuestionaireLinkResponseDto>();
         CreateMap<QuestionaireModel, QuestionaireResponseDto>();
-        CreateMap<StatementModel, StatementResponseDto>();
+        CreateMap<StatementModel, StatementResponseDto>()
+            .ForMember(dto => dto.Statement, cfg => cfg.MapFrom(src => src.Content));
         CreateMap<StatementSetModel, StatementSetResponseDto>();
         CreateMap<StatementTypeModel, StatementTypeResponseDto>();
     }
