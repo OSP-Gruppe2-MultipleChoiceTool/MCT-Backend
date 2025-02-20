@@ -1,9 +1,7 @@
 ﻿namespace MultipleChoiceTool.Infrastructure.Entities;
 
-internal record QuestionaireLinkEntity
+internal record QuestionaireLinkEntity : EntityBase
 {
-    public Guid Id { get; init; }
-
     public Guid QuestionaireId { get; init; }
     public QuestionaireEntity Questionaire { get; init; } = null!;
 

@@ -17,6 +17,6 @@ internal class GetStatementTypeByIdQueryHandler : IRequestHandler<GetStatementTy
 
     public async Task<StatementTypeModel?> Handle(GetStatementTypeByIdQuery request, CancellationToken cancellationToken)
     {
-        return await _statementTypeReadRepository.FindByIdAsync(request.StatementId, cancellationToken);
+        return await _statementTypeReadRepository.FindByIdAsync(request.StatementId, true, cancellationToken);
     }
 }

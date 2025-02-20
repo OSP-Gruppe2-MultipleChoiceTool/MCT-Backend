@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MultipleChoiceTool.Core.Repositories;
+using MultipleChoiceTool.Infrastructure.Extensions;
 
 namespace MultipleChoiceTool.Infrastructure.Repositories;
 
@@ -19,37 +21,55 @@ internal class EFBaseWriteRepository<TEntity, TModel> : IBaseWriteRepository<TMo
         _mapper = mapper;
     }
 
-    public async Task<TModel> CreateAsync(TModel model, CancellationToken cancellationToken = default)
+    public async Task<TModel> CreateAsync(TModel model, bool autoInclude = false, CancellationToken cancellationToken = default)
     {
         var entity = _mapper.Map<TEntity>(model);
-        await _dbContext.Set<TEntity>().AddAsync(entity, cancellationToken);
+        var result = await _dbContext.Set<TEntity>().AddAsync(entity, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return await FindInsertedEntity(entity, cancellationToken);
+        return await HandleResultAsync(result, autoInclude, cancellationToken);
+    }
+
+    public async Task<TModel> CreateAsync(TModel model, CancellationToken cancellationToken = default)
+    {
+        return await CreateAsync(model, autoInclude: false, cancellationToken: cancellationToken);
+    }
+
+    public async Task<TModel> DeleteAsync(TModel model, bool autoInclude = false, CancellationToken cancellationToken = default)
+    {
+        var entity = _mapper.Map<TEntity>(model);
+        var result = _dbContext.Set<TEntity>().Remove(entity);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return await HandleResultAsync(result, autoInclude, cancellationToken);
     }
 
     public async Task<TModel> DeleteAsync(TModel model, CancellationToken cancellationToken = default)
     {
+        return await DeleteAsync(model, autoInclude: false, cancellationToken: cancellationToken);
+    }
+
+    public async Task<TModel> UpdateAsync(TModel model, bool autoInclude = false, CancellationToken cancellationToken = default)
+    {
         var entity = _mapper.Map<TEntity>(model);
-        _dbContext.Set<TEntity>().Remove(entity);
+        var result = _dbContext.Set<TEntity>().Update(entity);
         await _dbContext.SaveChangesAsync(cancellationToken);
-        return _mapper.Map<TModel>(entity);
+
+        return await HandleResultAsync(result, autoInclude, cancellationToken);
     }
 
     public async Task<TModel> UpdateAsync(TModel model, CancellationToken cancellationToken = default)
     {
-        var entity = _mapper.Map<TEntity>(model);
-        _dbContext.Set<TEntity>().Update(entity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return await FindInsertedEntity(entity, cancellationToken);
+        return await UpdateAsync(model, autoInclude: false, cancellationToken: cancellationToken);
     }
 
-    private async Task<TModel> FindInsertedEntity(TEntity entity, CancellationToken cancellationToken = default)
+    private async Task<TModel> HandleResultAsync(EntityEntry<TEntity> entry, bool autoInclude, CancellationToken cancellationToken)
     {
-        entity = await _dbContext.Set<TEntity>()
-            .FirstAsync(dbEntity => dbEntity == entity, cancellationToken);
-
+        var entity = entry.Entity;
+        if (autoInclude)
+        {
+            await _dbContext.AutoIncludeRecursiveAsync(entity, cancellationToken);
+        }
         return _mapper.Map<TModel>(entity);
     }
 }

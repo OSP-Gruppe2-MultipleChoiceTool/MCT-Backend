@@ -17,7 +17,7 @@ namespace MultipleChoiceTool.Service.Queries
 
         public async Task<IEnumerable<StatementSetModel>?> Handle(GetAllStatementSetsQuery request, CancellationToken cancellationToken)
         {
-            var questionaireModel = await _questionaireReadRepository.FindByIdAsync(request.QuestionaireId, cancellationToken);
+            var questionaireModel = await _questionaireReadRepository.FindByIdAsync(request.QuestionaireId, true, cancellationToken);
             if (questionaireModel == null)
             {
                 return null;

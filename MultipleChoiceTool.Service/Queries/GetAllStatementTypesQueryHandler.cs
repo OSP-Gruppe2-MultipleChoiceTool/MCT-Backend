@@ -17,6 +17,6 @@ internal class GetAllStatementTypesQueryHandler : IRequestHandler<GetAllStatemen
 
     public Task<IEnumerable<StatementTypeModel>> Handle(GetAllStatementTypesQuery request, CancellationToken cancellationToken)
     {
-        return _statementTypeReadRepository.FindAllAsync(cancellationToken);
+        return _statementTypeReadRepository.FindAllAsync(true, cancellationToken);
     }
 }

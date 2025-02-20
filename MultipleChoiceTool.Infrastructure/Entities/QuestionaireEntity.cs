@@ -1,9 +1,7 @@
 ﻿namespace MultipleChoiceTool.Infrastructure.Entities;
 
-internal record QuestionaireEntity
+internal record QuestionaireEntity : EntityBase
 {
-    public Guid Id { get; init; }
-
     public string Title { get; set; } = null!;
 
     public ICollection<StatementSetEntity> StatementSets { get; init; } = null!;

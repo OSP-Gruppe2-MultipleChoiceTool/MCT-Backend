@@ -26,6 +26,6 @@ internal class DeleteQuestionaireCommandHandler : IRequestHandler<DeleteQuestion
             return null;
         }
 
-        return await _questionaireWriteRepository.DeleteAsync(questionaire, cancellationToken);
+        return await _questionaireWriteRepository.DeleteAsync(questionaire, true, cancellationToken);
     }
 }

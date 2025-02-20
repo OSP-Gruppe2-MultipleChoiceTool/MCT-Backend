@@ -18,6 +18,6 @@ public class CreateQuestionaireCommandHandler : IRequestHandler<CreateQuestionai
     public Task<QuestionaireModel> Handle(CreateQuestionaireCommand request, CancellationToken cancellationToken)
     {
         var questionaire = new QuestionaireModel(request.Title);
-        return _questionaireWriteRepository.CreateAsync(questionaire, cancellationToken);
+        return _questionaireWriteRepository.CreateAsync(questionaire, true, cancellationToken);
     }
 }
