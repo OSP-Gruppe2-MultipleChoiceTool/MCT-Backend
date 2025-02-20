@@ -5,5 +5,5 @@ namespace MultipleChoiceTool.Core.Commands;
 
 public record UpdateLinkCommand(
     Guid LinkId, 
-    QuestionaireLinkModel Link
+    DateOnly? ExpirationDate
 ) : IRequest<QuestionaireLinkModel?>;

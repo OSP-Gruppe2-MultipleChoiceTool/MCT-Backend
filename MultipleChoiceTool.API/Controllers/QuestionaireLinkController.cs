@@ -27,11 +27,9 @@ public class QuestionaireLinkController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<QuestionaireLinkResponseDto>> CreateLinkAsync(
         [FromRoute] Guid questionaireId,
-        [FromBody] QuestionaireLinkRequestDto link)
+        [FromBody] CreateQuestionaireLinkRequestDto request)
     {
-        var linkModel = _mapper.Map<QuestionaireLinkModel>(link);
-        linkModel = await _mediator.Send(new CreateLinkCommand(questionaireId, linkModel));
-
+        var linkModel = await _mediator.Send(new CreateLinkCommand(questionaireId, request.ExpirationDate));
         var linkDto = _mapper.Map<QuestionaireLinkResponseDto>(linkModel);
         return Ok(linkDto);
     }
@@ -54,11 +52,9 @@ public class QuestionaireLinkController : ControllerBase
     public async Task<ActionResult<QuestionaireLinkResponseDto>> UpdateLinkAsync(
         [FromRoute] Guid questionaireId, 
         [FromRoute] Guid linkId, 
-        [FromBody] QuestionaireLinkRequestDto link)
+        [FromBody] UpdateQuestionaireLinkRequestDto request)
     {
-        var linkModel = _mapper.Map<QuestionaireLinkModel>(link);
-        linkModel = await _mediator.Send(new UpdateLinkCommand(linkId, linkModel));
-
+        var linkModel = await _mediator.Send(new UpdateLinkCommand(linkId, request.ExpirationDate));
         if (linkModel == null)
         {
             return NotFound();

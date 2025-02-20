@@ -27,8 +27,7 @@ internal class CreateLinkCommandHandler : IRequestHandler<CreateLinkCommand, Que
             return null;
         }
 
-        request.Link.QuestionaireId = questionaire.Id;
-
-        return await _linkWriteRepository.CreateAsync(request.Link, cancellationToken);
+        var link = new QuestionaireLinkModel(request.QuestionaireId, request.ExpirationDate);
+        return await _linkWriteRepository.CreateAsync(link, cancellationToken);
     }
 }

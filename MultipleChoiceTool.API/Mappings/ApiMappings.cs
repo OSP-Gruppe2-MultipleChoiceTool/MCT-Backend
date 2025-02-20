@@ -10,8 +10,7 @@ public class ApiMappings : Profile
     {
         CreateMap<QuestionaireLinkModel, QuestionaireLinkResponseDto>();
         CreateMap<QuestionaireModel, QuestionaireResponseDto>();
-        CreateMap<QuestionaireRequestDto, QuestionaireModel>();
-
+        CreateMap<StatementModel, StatementResponseDto>();
         CreateMap<StatementSetModel, StatementSetResponseDto>();
         CreateMap<StatementTypeModel, StatementTypeResponseDto>();
     }

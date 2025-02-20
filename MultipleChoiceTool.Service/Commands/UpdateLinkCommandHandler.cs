@@ -26,9 +26,9 @@ internal class UpdateLinkCommandHandler : IRequestHandler<UpdateLinkCommand, Que
             return null;
         }
 
-        if (request.Link.ExpirationDate != default)
+        if (request.ExpirationDate != null)
         {
-            link.ExpirationDate = request.Link.ExpirationDate;
+            link.ExpirationDate = request.ExpirationDate.Value;
         }
 
         return await _linkWriteRepository.UpdateAsync(link, cancellationToken);
