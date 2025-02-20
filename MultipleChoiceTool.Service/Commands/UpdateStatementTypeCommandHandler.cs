@@ -8,28 +8,29 @@ namespace MultipleChoiceTool.Service.Commands;
 
 internal class UpdateStatementTypeCommandHandler : IRequestHandler<UpdateStatementTypeCommand, StatementTypeModel?>
 {
+    private readonly IBaseReadRepository<StatementTypeModel> _statementTypeReadRepository;
     private readonly IBaseWriteRepository<StatementTypeModel> _statementTypeWriteRepository;
-    private readonly IMediator _mediator;
 
     public UpdateStatementTypeCommandHandler(
+        IBaseReadRepository<StatementTypeModel> statementTypeReadRepository,
         IBaseWriteRepository<StatementTypeModel> statementTypeWriteRepository,
         IMediator mediator)
     {
+        _statementTypeReadRepository = statementTypeReadRepository;
         _statementTypeWriteRepository = statementTypeWriteRepository;
-        _mediator = mediator;
     }
 
     public async Task<StatementTypeModel?> Handle(UpdateStatementTypeCommand request, CancellationToken cancellationToken)
     {
-        var statementType = await _mediator.Send(new GetStatementTypeByIdQuery(request.StatementTypeId));
+        var statementType = await _statementTypeReadRepository.FindByIdAsync(request.StatementTypeId, cancellationToken);
         if (statementType == null)
         {
             return null;
         }
 
-        if (!string.IsNullOrWhiteSpace(request.StatementType.Title))
+        if (!string.IsNullOrWhiteSpace(request.Title))
         {
-            statementType.Title = request.StatementType.Title;
+            statementType.Title = request.Title;
         }
 
         return await _statementTypeWriteRepository.UpdateAsync(statementType, cancellationToken);

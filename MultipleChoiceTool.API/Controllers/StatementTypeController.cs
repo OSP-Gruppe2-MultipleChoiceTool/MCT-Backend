@@ -26,11 +26,9 @@ public class StatementTypeController : ControllerBase
 
     [HttpPut]
     public async Task<ActionResult<StatementTypeResponseDto>> AddStatementTypeAsync(
-        [FromBody] StatementTypeRequestDto statementType)
+        [FromBody] CreateStatementTypeRequestDto request)
     {
-        var statementTypeModel = _mapper.Map<StatementTypeModel>(statementType);
-        statementTypeModel = await _mediator.Send(new CreateStatementTypeCommand(statementTypeModel));
-
+        var statementTypeModel = await _mediator.Send(new CreateStatementTypeCommand(request.Title));
         var statementTypeDto = _mapper.Map<StatementTypeResponseDto>(statementTypeModel);
         return Ok(statementTypeDto);
     }
@@ -60,11 +58,9 @@ public class StatementTypeController : ControllerBase
     [HttpPatch("{statementTypeId}")]
     public async Task<ActionResult<StatementTypeResponseDto>> UpdateStatementTypeByIdAsync(
         [FromRoute] Guid statementTypeId,
-        [FromBody] StatementTypeRequestDto statementType)
+        [FromBody] UpdateStatementTypeRequestDto request)
     {
-        var statementTypeModel = _mapper.Map<StatementTypeModel>(statementType);
-        statementTypeModel = await _mediator.Send(new UpdateStatementTypeCommand(statementTypeId, statementTypeModel));
-
+        var statementTypeModel = await _mediator.Send(new UpdateStatementTypeCommand(statementTypeId, request.Title));
         if (statementTypeModel == null)
         {
             return NotFound();
