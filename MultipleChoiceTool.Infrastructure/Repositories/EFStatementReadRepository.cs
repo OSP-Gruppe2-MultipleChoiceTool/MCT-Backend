@@ -15,11 +15,21 @@ internal class EFStatementReadRepository : EFBaseReadRepository<StatementEntity,
     {
     }
 
-    public async Task<StatementModel?> FindStatementByContentAsync(string content, CancellationToken cancellationToken = default)
+    public async Task<StatementModel?> FindStatementByContentAsync(string content, bool autoInclude = false, CancellationToken cancellationToken = default)
     {
         var entity = await _dbContext.Set<StatementEntity>()
             .FirstOrDefaultAsync(x => x.Statement == content, cancellationToken);
 
+        if (entity != null && autoInclude)
+        {
+            await LoadNavigationsAsync(entity, cancellationToken);
+        }
+
         return _mapper.Map<StatementModel?>(entity);
+    }
+
+    public async Task<StatementModel?> FindStatementByContentAsync(string content, CancellationToken cancellationToken = default)
+    {
+        return await FindStatementByContentAsync(content, autoInclude: false, cancellationToken);
     }
 }

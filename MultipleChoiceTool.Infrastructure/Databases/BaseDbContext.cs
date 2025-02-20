@@ -42,12 +42,6 @@ internal abstract class BaseDbContext<T> : DbContext
                 .WithOne(questionaireLink => questionaireLink.Questionaire)
                 .HasForeignKey(questionaireLink => questionaireLink.QuestionaireId)
                 .HasPrincipalKey(questionaire => questionaire.Id);
-
-            questionaire.Navigation(questionaire => questionaire.StatementSets)
-                .AutoInclude();
-
-            questionaire.Navigation(questionaire => questionaire.QuestionaireLinks)
-                .AutoInclude();
         });
 
         modelBuilder.Entity<QuestionaireLinkEntity>(questionaireLink =>
@@ -68,12 +62,6 @@ internal abstract class BaseDbContext<T> : DbContext
                 .WithOne(statement => statement.StatementSet)
                 .HasForeignKey(statement => statement.StatementSetId)
                 .HasPrincipalKey(statementSet => statementSet.Id);
-
-            statementSet.Navigation(statementSet => statementSet.StatementType)
-                .AutoInclude();
-
-            statementSet.Navigation(statementSet => statementSet.Statements)
-                .AutoInclude();
         });
 
         modelBuilder.Entity<StatementTypeEntity>(statementType =>

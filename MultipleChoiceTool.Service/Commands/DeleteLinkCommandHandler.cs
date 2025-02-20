@@ -20,7 +20,7 @@ internal class DeleteLinkCommandHandler : IRequestHandler<DeleteLinkCommand, Que
 
     public async Task<QuestionaireLinkModel?> Handle(DeleteLinkCommand request, CancellationToken cancellationToken)
     {
-        var link = await _linkReadRepository.FindByIdAsync(request.LinkId);
+        var link = await _linkReadRepository.FindByIdAsync(request.LinkId, cancellationToken);
         if (link == null)
         {
             return null;
