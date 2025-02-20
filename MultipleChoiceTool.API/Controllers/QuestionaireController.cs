@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using MultipleChoiceTool.API.Dtos.Requests;
 using MultipleChoiceTool.API.Dtos.Responses;
 using MultipleChoiceTool.Core.Commands;
-using MultipleChoiceTool.Core.Models;
 using MultipleChoiceTool.Core.Queries;
 
 namespace MultipleChoiceTool.API.Controllers;
@@ -85,9 +84,14 @@ public class QuestionaireController : ControllerBase
     }
 
     [HttpGet("{questionaireId}/export")]
-    public Task<ActionResult<string>> ExportQuestionaireAsync(
+    public async Task<ActionResult<string>> ExportQuestionaireAsync(
         [FromRoute] Guid questionaireId)
     {
-        throw new NotImplementedException();
+        var richText = await _mediator.Send(new ExportQuestionaireToRTFCommand(questionaireId));
+        if (richText == null)
+        {
+            return NotFound();
+        }
+        return Ok(richText);
     }
 }
