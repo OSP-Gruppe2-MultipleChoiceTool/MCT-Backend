@@ -29,7 +29,7 @@ internal class EFBaseReadRepository<TEntity, TModel> : IBaseReadRepository<TMode
         {
             foreach (var entity in entities)
             {
-                await _dbContext.LoadNavigationsAsync(entity, cancellationToken);
+                await _dbContext.AutoIncludeRecursiveAsync(entity, cancellationToken);
             }
         }
 
@@ -47,7 +47,7 @@ internal class EFBaseReadRepository<TEntity, TModel> : IBaseReadRepository<TMode
 
         if (entity != null && autoInclude)
         {
-            await _dbContext.LoadNavigationsAsync(entity, cancellationToken);
+            await _dbContext.AutoIncludeRecursiveAsync(entity, cancellationToken);
         }
 
         return _mapper.Map<TModel?>(entity);

@@ -68,7 +68,7 @@ internal class EFBaseWriteRepository<TEntity, TModel> : IBaseWriteRepository<TMo
         var entity = entry.Entity;
         if (autoInclude)
         {
-            await _dbContext.LoadNavigationsAsync(entity, cancellationToken);
+            await _dbContext.AutoIncludeRecursiveAsync(entity, cancellationToken);
         }
         return _mapper.Map<TModel>(entity);
     }

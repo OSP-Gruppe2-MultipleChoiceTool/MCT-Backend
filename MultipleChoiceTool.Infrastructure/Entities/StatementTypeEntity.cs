@@ -1,9 +1,7 @@
 ﻿namespace MultipleChoiceTool.Infrastructure.Entities;
 
-internal record StatementTypeEntity
+internal record StatementTypeEntity : EntityBase
 {
-    public Guid Id { get; init; }
-
     public string Title { get; set; } = null!;
 
     public ICollection<StatementSetEntity> StatementSets { get; init; } = null!;

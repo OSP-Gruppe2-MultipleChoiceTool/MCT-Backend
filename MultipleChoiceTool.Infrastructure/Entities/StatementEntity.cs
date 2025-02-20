@@ -1,9 +1,7 @@
 ﻿namespace MultipleChoiceTool.Infrastructure.Entities;
 
-internal record StatementEntity
+internal record StatementEntity : EntityBase
 {
-    public Guid Id { get; init; }
-
     public bool IsCorrect { get; set; }
 
     public string Statement { get; set; } = null!;

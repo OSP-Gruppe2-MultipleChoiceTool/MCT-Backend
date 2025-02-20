@@ -23,7 +23,7 @@ internal class EFStatementReadRepository : EFBaseReadRepository<StatementEntity,
 
         if (entity != null && autoInclude)
         {
-            await _dbContext.LoadNavigationsAsync(entity, cancellationToken);
+            await _dbContext.AutoIncludeRecursiveAsync(entity, cancellationToken);
         }
 
         return _mapper.Map<StatementModel?>(entity);
