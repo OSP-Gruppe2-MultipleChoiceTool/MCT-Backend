@@ -36,6 +36,6 @@ internal class UpdateStatementCommandHandler : IRequestHandler<UpdateStatementCo
             statement.IsCorrect = (bool)request.IsCorrect;
         }
 
-        return await _statementWriteRepository.UpdateAsync(statement, cancellationToken);
+        return await _statementWriteRepository.UpdateAsync(statement, true, cancellationToken);
     }
 }

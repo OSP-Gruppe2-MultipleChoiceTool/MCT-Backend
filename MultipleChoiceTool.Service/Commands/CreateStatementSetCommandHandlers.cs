@@ -27,7 +27,7 @@ namespace MultipleChoiceTool.Service.Commands
             }
 
             var statementSet = new StatementSetModel(questionaire.Id, request.StatementTypeId, request.Explaination, request.StatementImage);
-            return await _statementSetWriteRepository.CreateAsync(statementSet, cancellationToken);
+            return await _statementSetWriteRepository.CreateAsync(statementSet, true, cancellationToken);
         }
     }
 }

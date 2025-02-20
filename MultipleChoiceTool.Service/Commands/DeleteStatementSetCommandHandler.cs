@@ -26,6 +26,6 @@ internal class DeleteStatementSetCommandHandler : IRequestHandler<DeleteStatemen
             return null;
         }
 
-        return await _statementSetWriteRepository.DeleteAsync(statementSet, cancellationToken);
+        return await _statementSetWriteRepository.DeleteAsync(statementSet, true, cancellationToken);
     }
 }

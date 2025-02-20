@@ -31,6 +31,6 @@ internal class UpdateQuestionaireCommandHandler : IRequestHandler<UpdateQuestion
             questionaire.Title = request.Title;
         }
 
-        return await _questionaireWriteRepository.UpdateAsync(questionaire, cancellationToken);
+        return await _questionaireWriteRepository.UpdateAsync(questionaire, true, cancellationToken);
     }
 }

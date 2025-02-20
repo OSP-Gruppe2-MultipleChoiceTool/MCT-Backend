@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using MultipleChoiceTool.Core.Commands;
 using MultipleChoiceTool.Core.Models;
-using MultipleChoiceTool.Core.Queries;
 using MultipleChoiceTool.Core.Repositories;
 
 namespace MultipleChoiceTool.Service.Commands;
@@ -33,6 +32,6 @@ internal class UpdateStatementTypeCommandHandler : IRequestHandler<UpdateStateme
             statementType.Title = request.Title;
         }
 
-        return await _statementTypeWriteRepository.UpdateAsync(statementType, cancellationToken);
+        return await _statementTypeWriteRepository.UpdateAsync(statementType, true, cancellationToken);
     }
 }

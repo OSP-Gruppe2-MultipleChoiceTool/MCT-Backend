@@ -2,6 +2,7 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MultipleChoiceTool.Core.Repositories;
+using MultipleChoiceTool.Infrastructure.Extensions;
 
 namespace MultipleChoiceTool.Infrastructure.Repositories;
 
@@ -28,7 +29,7 @@ internal class EFBaseReadRepository<TEntity, TModel> : IBaseReadRepository<TMode
         {
             foreach (var entity in entities)
             {
-                await LoadNavigationsAsync(entity, cancellationToken);
+                await _dbContext.LoadNavigationsAsync(entity, cancellationToken);
             }
         }
 
@@ -46,7 +47,7 @@ internal class EFBaseReadRepository<TEntity, TModel> : IBaseReadRepository<TMode
 
         if (entity != null && autoInclude)
         {
-            await LoadNavigationsAsync(entity, cancellationToken);
+            await _dbContext.LoadNavigationsAsync(entity, cancellationToken);
         }
 
         return _mapper.Map<TModel?>(entity);
@@ -55,19 +56,5 @@ internal class EFBaseReadRepository<TEntity, TModel> : IBaseReadRepository<TMode
     public async Task<TModel?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await FindByIdAsync(id, autoInclude: false, cancellationToken);
-    }
-
-    protected async Task LoadNavigationsAsync(TEntity entity, CancellationToken cancellationToken)
-    {
-        var entityType = _dbContext.Model.FindEntityType(typeof(TEntity));
-        if (entityType != null)
-        {
-            foreach (var navigation in entityType.GetNavigations())
-            {
-                await _dbContext.Entry(entity)
-                    .Collection(navigation.Name)
-                    .LoadAsync(cancellationToken);
-            }
-        }
     }
 }

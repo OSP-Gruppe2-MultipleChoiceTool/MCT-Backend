@@ -17,6 +17,6 @@ internal class GetAllQuestionairesQueryHandler : IRequestHandler<GetAllQuestiona
 
     public async Task<IEnumerable<QuestionaireModel>> Handle(GetAllQuestionairesQuery request, CancellationToken cancellationToken)
     {
-        return await _questionaireReadRepository.FindAllAsync(cancellationToken);
+        return await _questionaireReadRepository.FindAllAsync(true, cancellationToken);
     }
 }

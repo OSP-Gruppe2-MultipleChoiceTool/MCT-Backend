@@ -2,11 +2,6 @@
 using MultipleChoiceTool.Core.Models;
 using MultipleChoiceTool.Core.Queries;
 using MultipleChoiceTool.Core.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MultipleChoiceTool.Service.Queries;
 
@@ -17,8 +12,7 @@ internal class GetQuestionaireByLinkIdHandler : IRequestHandler<GetQuestionaireB
 
     public GetQuestionaireByLinkIdHandler(
         IBaseReadRepository<QuestionaireModel> questionaireReadRepository,
-        IBaseReadRepository<QuestionaireLinkModel> questionaireLinkRepository
-        )
+        IBaseReadRepository<QuestionaireLinkModel> questionaireLinkRepository)
     {
         _questionaireReadRepository = questionaireReadRepository;
         _questionaireLinkRepository = questionaireLinkRepository;
@@ -31,13 +25,14 @@ internal class GetQuestionaireByLinkIdHandler : IRequestHandler<GetQuestionaireB
         {
             return null;
         }
-        var questionaire = await _questionaireReadRepository.FindByIdAsync(link.QuestionaireId, cancellationToken);
+
+        var questionaire = await _questionaireReadRepository.FindByIdAsync(link.QuestionaireId, true, cancellationToken);
         if (questionaire == null)
         {
             return null;
         }
 
-        if (request.IsExam == true)
+        if (request.IsExam)
         {
             var random = new Random();
             var shuffledStatementSets = questionaire.StatementSets.OrderBy(x => random.Next()).ToList();

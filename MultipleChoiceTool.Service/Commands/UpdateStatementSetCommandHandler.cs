@@ -41,6 +41,6 @@ internal class UpdateStatementSetCommandHandler : IRequestHandler<UpdateStatemen
             statementSet.StatementImage = request.StatementImage;
         }
 
-        return await _statementSetWriteRepository.UpdateAsync(statementSet, cancellationToken);
+        return await _statementSetWriteRepository.UpdateAsync(statementSet, true, cancellationToken);
     }
 }

@@ -26,6 +26,6 @@ internal class DeleteLinkCommandHandler : IRequestHandler<DeleteLinkCommand, Que
             return null;
         }
 
-        return await _linkWriteRepository.DeleteAsync(link);
+        return await _linkWriteRepository.DeleteAsync(link, true, cancellationToken);
     }
 }

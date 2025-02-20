@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MultipleChoiceTool.Core.Models;
 using MultipleChoiceTool.Core.Repositories;
 using MultipleChoiceTool.Infrastructure.Entities;
+using MultipleChoiceTool.Infrastructure.Extensions;
 
 namespace MultipleChoiceTool.Infrastructure.Repositories;
 
@@ -22,7 +23,7 @@ internal class EFStatementReadRepository : EFBaseReadRepository<StatementEntity,
 
         if (entity != null && autoInclude)
         {
-            await LoadNavigationsAsync(entity, cancellationToken);
+            await _dbContext.LoadNavigationsAsync(entity, cancellationToken);
         }
 
         return _mapper.Map<StatementModel?>(entity);

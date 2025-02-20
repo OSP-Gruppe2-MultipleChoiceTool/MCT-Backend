@@ -23,7 +23,7 @@ internal class CreateStatementCommandHandler : IRequestHandler<CreateStatementCo
 
     public async Task<StatementModel?> Handle(CreateStatementCommand request, CancellationToken cancellationToken)
     {
-        var statement = await _statementReadRepository.FindStatementByContentAsync(request.Content, cancellationToken);
+        var statement = await _statementReadRepository.FindStatementByContentAsync(request.Content, true, cancellationToken);
         if (statement != null)
         {
             return statement;
@@ -36,6 +36,6 @@ internal class CreateStatementCommandHandler : IRequestHandler<CreateStatementCo
         }
 
         statement = new StatementModel(request.IsCorrect, request.Content, statementSet.Id);
-        return await _statementWriteRepository.CreateAsync(statement, cancellationToken);
+        return await _statementWriteRepository.CreateAsync(statement, true, cancellationToken);
     }
 }
