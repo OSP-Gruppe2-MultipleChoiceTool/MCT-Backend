@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using MultipleChoiceTool.API.Dtos.Requests;
 using MultipleChoiceTool.API.Dtos.Responses;
+using MultipleChoiceTool.Core.Commands;
 using MultipleChoiceTool.Core.Models;
+using MultipleChoiceTool.Core.Queries;
 
 namespace MultipleChoiceTool.API.Controllers;
 
@@ -8,34 +13,69 @@ namespace MultipleChoiceTool.API.Controllers;
 [Route("api/questionaires/{questionaireId}/links")]
 public class QuestionaireLinkController : ControllerBase
 {
-    [HttpPost]
-    public Task<ActionResult<QuestionaireLinkModel>> CreateLinkAsync(
-        [FromRoute] Guid questionaireId)
+    private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
+
+    public QuestionaireLinkController(
+        IMediator mediator,
+        IMapper mapper)
     {
-        throw new NotImplementedException();
+        _mediator = mediator;
+        _mapper = mapper;
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<QuestionaireLinkResponseDto>> CreateLinkAsync(
+        [FromRoute] Guid questionaireId,
+        [FromBody] CreateQuestionaireLinkRequestDto request)
+    {
+        var linkModel = await _mediator.Send(new CreateLinkCommand(questionaireId, request.ExpirationDate));
+        var linkDto = _mapper.Map<QuestionaireLinkResponseDto>(linkModel);
+        return Ok(linkDto);
     }
 
     [HttpGet]
-    public Task<ActionResult<IEnumerable<QuestionaireLinkModel>>> GetAllLinksAsync(
+    public async Task<ActionResult<IEnumerable<QuestionaireLinkResponseDto>>> GetAllLinksAsync(
         [FromRoute] Guid questionaireId)
     {
-        throw new NotImplementedException();
+        var linkModels = await _mediator.Send(new GetAllLinksQuery(questionaireId));
+        if (linkModels == null)
+        {
+            return NotFound();
+        }
+
+        var linkDtos = _mapper.Map<IEnumerable<QuestionaireLinkResponseDto>>(linkModels);
+        return Ok(linkDtos);
     }
 
     [HttpPatch("{linkId}")]
-    public Task<ActionResult<QuestionaireLinkModel>> UpdateLinkAsync(
+    public async Task<ActionResult<QuestionaireLinkResponseDto>> UpdateLinkAsync(
         [FromRoute] Guid questionaireId, 
         [FromRoute] Guid linkId, 
-        [FromBody] QuestionaireLinkResponseDto link)
+        [FromBody] UpdateQuestionaireLinkRequestDto request)
     {
-        throw new NotImplementedException();
+        var linkModel = await _mediator.Send(new UpdateLinkCommand(linkId, request.ExpirationDate));
+        if (linkModel == null)
+        {
+            return NotFound();
+        }
+
+        var linkDto = _mapper.Map<QuestionaireLinkResponseDto>(linkModel);
+        return Ok(linkDto);
     }
 
     [HttpDelete("{linkId}")]
-    public Task<ActionResult> DeleteLinkAsync(
+    public async Task<ActionResult> DeleteLinkAsync(
         [FromRoute] Guid questionaireId,
         [FromRoute] Guid linkId)
     {
-        throw new NotImplementedException();
+        var linkModel = await _mediator.Send(new DeleteLinkCommand(linkId));
+        if (linkModel == null)
+        {
+            return NotFound();
+        }
+
+        var linkDto = _mapper.Map<QuestionaireLinkResponseDto>(linkModel);
+        return Ok(linkDto);
     }
 }
