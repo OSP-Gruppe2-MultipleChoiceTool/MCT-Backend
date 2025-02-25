@@ -7,11 +7,11 @@ namespace MultipleChoiceTool.Service.Commands;
 
 internal class UpdateStatementSetCommandHandler : IRequestHandler<UpdateStatementSetCommand, StatementSetModel?>
 {
-    private readonly IBaseReadRepository<StatementSetModel> _statementSetReadRepository;
+    private readonly IStatementSetReadRepository _statementSetReadRepository;
     private readonly IBaseWriteRepository<StatementSetModel> _statementSetWriteRepository;
 
     public UpdateStatementSetCommandHandler(
-        IBaseReadRepository<StatementSetModel> statementSetReadRepository, 
+        IStatementSetReadRepository statementSetReadRepository, 
         IBaseWriteRepository<StatementSetModel> statementSetWriteRepository)
     {
         _statementSetReadRepository = statementSetReadRepository;
