@@ -8,12 +8,12 @@ namespace MultipleChoiceTool.Service.Commands;
 internal class CreateStatementCommandHandler : IRequestHandler<CreateStatementCommand, StatementModel?>
 {
     private readonly IStatementReadRepository _statementReadRepository;
-    private readonly IBaseReadRepository<StatementSetModel> _statementSetReadRepository;
+    private readonly IStatementSetReadRepository _statementSetReadRepository;
     private readonly IBaseWriteRepository<StatementModel> _statementWriteRepository;
 
     public CreateStatementCommandHandler(
         IStatementReadRepository statementReadRepository,
-        IBaseReadRepository<StatementSetModel> statementSetReadRepository, 
+        IStatementSetReadRepository statementSetReadRepository, 
         IBaseWriteRepository<StatementModel> statementWriteRepository)
     {
         _statementReadRepository = statementReadRepository;

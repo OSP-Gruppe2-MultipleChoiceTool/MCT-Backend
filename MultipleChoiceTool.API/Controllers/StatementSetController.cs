@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using MultipleChoiceTool.API.Dtos.Requests;
 using MultipleChoiceTool.API.Dtos.Responses;
 using MultipleChoiceTool.Core.Commands;
-using MultipleChoiceTool.Core.Models;
 using MultipleChoiceTool.Core.Queries;
 
 namespace MultipleChoiceTool.API.Controllers;
