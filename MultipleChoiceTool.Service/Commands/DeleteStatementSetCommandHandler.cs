@@ -7,11 +7,11 @@ namespace MultipleChoiceTool.Service.Commands;
 
 internal class DeleteStatementSetCommandHandler : IRequestHandler<DeleteStatementSetCommand, StatementSetModel?>
 {
-    private readonly IBaseReadRepository<StatementSetModel> _statementSetReadRepository;
+    private readonly IStatementSetReadRepository _statementSetReadRepository;
     private readonly IBaseWriteRepository<StatementSetModel> _statementSetWriteRepository;
 
     public DeleteStatementSetCommandHandler(
-        IBaseReadRepository<StatementSetModel> statementSetReadRepository,
+        IStatementSetReadRepository statementSetReadRepository,
         IBaseWriteRepository<StatementSetModel> statementSetWriteRepository)
     {
         _statementSetReadRepository = statementSetReadRepository;

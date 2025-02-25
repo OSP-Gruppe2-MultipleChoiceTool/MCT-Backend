@@ -36,6 +36,7 @@ public static class ServiceExtensions
 
     private static void AddSpecialEFRepositories(this IServiceCollection services)
     {
+        services.AddScoped<IStatementSetReadRepository, EFStatementSetReadRepository>();
         services.AddScoped<IStatementReadRepository, EFStatementReadRepository>();
         services.AddScoped<IStatementTypeReadRepository, EFStatementTypeReadRepository>();
     }
