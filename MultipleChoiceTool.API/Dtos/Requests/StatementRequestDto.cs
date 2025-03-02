@@ -1,6 +1,6 @@
 ﻿namespace MultipleChoiceTool.API.Dtos.Requests;
 
-public record CreateStatementRequestDto
+public record StatementRequestDto
 {
     public bool IsCorrect { get; init; }
 

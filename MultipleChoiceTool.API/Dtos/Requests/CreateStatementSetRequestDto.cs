@@ -7,4 +7,6 @@ public record CreateStatementSetRequestDto
     public string? StatementImage { get; init; }
 
     public Guid? StatementTypeId { get; init; }
+
+    public IEnumerable<StatementRequestDto> Statements { get; init; } = null!;
 }
