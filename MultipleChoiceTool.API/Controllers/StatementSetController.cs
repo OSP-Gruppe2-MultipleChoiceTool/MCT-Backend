@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MultipleChoiceTool.API.Dtos.Requests;
 using MultipleChoiceTool.API.Dtos.Responses;
 using MultipleChoiceTool.Core.Commands;
+using MultipleChoiceTool.Core.Models;
 using MultipleChoiceTool.Core.Queries;
 
 namespace MultipleChoiceTool.API.Controllers;
@@ -28,8 +29,10 @@ public class StatementSetController : ControllerBase
         [FromRoute] Guid questionaireId,
         [FromBody] CreateStatementSetRequestDto request)
     {
+        var statementModels = _mapper.Map<IEnumerable<StatementModel>>(request.Statements);
+
         var statementSetModel = await _mediator.Send(new CreateStatementSetCommand(
-            questionaireId, request.Explaination, request.StatementImage, request.StatementTypeId));
+            questionaireId, request.Explaination, request.StatementImage, request.StatementTypeId, statementModels));
         
         if (statementSetModel == null)
         {
@@ -60,8 +63,10 @@ public class StatementSetController : ControllerBase
         [FromRoute] Guid statementSetId,
         [FromBody] UpdateStatementSetRequestDto request)
     {
+        var statementModels = _mapper.Map<IEnumerable<StatementModel>>(request.Statements);
+
         var statementSetModel = await _mediator.Send(new UpdateStatementSetCommand(
-            statementSetId, request.Explaination, request.StatementImage, request.StatementTypeId));
+            statementSetId, request.Explaination, request.StatementImage, request.StatementTypeId, statementModels));
 
         if (statementSetModel == null)
         {

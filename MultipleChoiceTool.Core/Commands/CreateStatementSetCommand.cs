@@ -7,5 +7,6 @@ public record CreateStatementSetCommand(
     Guid QuestionaireId,
     string? Explaination,
     string? StatementImage,
-    Guid? StatementTypeId
+    Guid? StatementTypeId,
+    IEnumerable<StatementModel> Statements
 ) : IRequest<StatementSetModel?>;

@@ -7,5 +7,6 @@ public record UpdateStatementSetCommand(
     Guid StatementSetId,
     string? Explaination,
     string? StatementImage,
-    Guid? StatementTypeId
+    Guid? StatementTypeId,
+    IEnumerable<StatementModel>? Statements
 ) : IRequest<StatementSetModel?>;
