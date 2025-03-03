@@ -81,13 +81,4 @@ public class StatementTypeController : ControllerBase
 
         return NoContent();
     }
-
-    [HttpGet("{statementTypeId}/statement-sets")]
-    public async Task<ActionResult<IEnumerable<StatementSetResponseDto>>>GetStatementSetsByTypeIdAsync(
-        [FromRoute] Guid statementTypeId)
-    {
-        var statementSetModels = await _mediator.Send(new GetStatementSetsByTypeIdQuery(statementTypeId));
-        var statementSetDtos = _mapper.Map<IEnumerable<StatementSetResponseDto>>(statementSetModels);
-        return Ok(statementSetDtos);
-    }
 }
