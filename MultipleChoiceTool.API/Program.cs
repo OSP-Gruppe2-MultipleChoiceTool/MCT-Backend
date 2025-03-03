@@ -1,4 +1,5 @@
 using MultipleChoiceTool.API.Extensions;
+using MultipleChoiceTool.Core.Extensions;
 using MultipleChoiceTool.Infrastructure.Extensions;
 using MultipleChoiceTool.Service.Extensions;
 
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMultipleChoiceToolApi(builder.Configuration);
 builder.Services.AddMultipleChoiceToolInfrastructure();
 builder.Services.AddMultipleChoiceToolService();
+builder.Services.AddMultipleChoiceToolCore();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

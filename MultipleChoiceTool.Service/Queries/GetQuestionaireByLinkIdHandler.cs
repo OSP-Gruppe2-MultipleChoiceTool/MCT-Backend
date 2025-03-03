@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using MultipleChoiceTool.Core.Models;
+using MultipleChoiceTool.Core.Providers;
 using MultipleChoiceTool.Core.Queries;
 using MultipleChoiceTool.Core.Repositories;
 
@@ -7,13 +8,16 @@ namespace MultipleChoiceTool.Service.Queries;
 
 internal class GetQuestionaireByLinkIdHandler : IRequestHandler<GetQuestionaireByLinkIdQuery, QuestionaireModel?>
 {
+    private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IBaseReadRepository<QuestionaireModel> _questionaireReadRepository;
     private readonly IBaseReadRepository<QuestionaireLinkModel> _questionaireLinkRepository;
 
     public GetQuestionaireByLinkIdHandler(
+        IDateTimeProvider dateTimeProvider,
         IBaseReadRepository<QuestionaireModel> questionaireReadRepository,
         IBaseReadRepository<QuestionaireLinkModel> questionaireLinkRepository)
     {
+        _dateTimeProvider = dateTimeProvider;
         _questionaireReadRepository = questionaireReadRepository;
         _questionaireLinkRepository = questionaireLinkRepository;
     }
@@ -21,7 +25,7 @@ internal class GetQuestionaireByLinkIdHandler : IRequestHandler<GetQuestionaireB
     public async Task<QuestionaireModel?> Handle(GetQuestionaireByLinkIdQuery request, CancellationToken cancellationToken)
     {
         var link = await _questionaireLinkRepository.FindByIdAsync(request.LinkId, cancellationToken);
-        if (link == null)
+        if (link == null || IsLinkExpired(link))
         {
             return null;
         }
@@ -40,5 +44,12 @@ internal class GetQuestionaireByLinkIdHandler : IRequestHandler<GetQuestionaireB
         }
 
         return questionaire;
+    }
+
+    private bool IsLinkExpired(QuestionaireLinkModel link)
+    {
+        var currentDateTime = _dateTimeProvider.UtcNow.Date;
+        var expirationDateTime = link.ExpirationDate.ToDateTime(TimeOnly.MinValue);
+        return currentDateTime > expirationDateTime;
     }
 }

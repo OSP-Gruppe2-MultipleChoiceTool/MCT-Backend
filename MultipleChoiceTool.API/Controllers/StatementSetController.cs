@@ -88,6 +88,6 @@ public class StatementSetController : ControllerBase
             return NotFound();
         }
 
-        return Ok();
+        return NoContent();
     }
 }

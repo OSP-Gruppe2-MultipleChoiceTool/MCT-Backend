@@ -29,6 +29,11 @@ public class QuestionaireLinkController : ControllerBase
         [FromBody] CreateQuestionaireLinkRequestDto request)
     {
         var linkModel = await _mediator.Send(new CreateLinkCommand(questionaireId, request.ExpirationDate));
+        if (linkModel == null)
+        {
+            return NotFound();
+        }
+
         var linkDto = _mapper.Map<QuestionaireLinkResponseDto>(linkModel);
         return Ok(linkDto);
     }
@@ -74,7 +79,6 @@ public class QuestionaireLinkController : ControllerBase
             return NotFound();
         }
 
-        var linkDto = _mapper.Map<QuestionaireLinkResponseDto>(linkModel);
-        return Ok(linkDto);
+        return NoContent();
     }
 }
