@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MultipleChoiceTool.API.Dtos.Requests;
 using MultipleChoiceTool.API.Dtos.Responses;
 using MultipleChoiceTool.Core.Commands;
+using MultipleChoiceTool.Core.Models;
 using MultipleChoiceTool.Core.Queries;
 
 namespace MultipleChoiceTool.API.Controllers;
@@ -25,9 +26,13 @@ public class QuestionaireController : ControllerBase
 
     [HttpPost]
     public async Task<ActionResult<QuestionaireResponseDto>> CreateQuestionaireAsync(
+        [FromQuery] Guid? statementTypeId,
         [FromBody] CreateQuestionaireRequestDto request)
     {
-        var questionaireModel = await _mediator.Send(new CreateQuestionaireCommand(request.Title));
+        var questionaireModel = statementTypeId == null ?
+            await _mediator.Send(new CreateQuestionaireCommand(request.Title)) :
+            await _mediator.Send(new CreateStatementTypeQuestionaireCommand(request.Title, statementTypeId.Value));
+
         var questionaireDto = _mapper.Map<QuestionaireResponseDto>(questionaireModel);
         return Ok(questionaireDto);
     }

@@ -27,6 +27,11 @@ public class UserAccessController : ControllerBase
         [FromQuery] bool isExam)
     {
         var questionaireModel = await _mediator.Send(new GetQuestionaireByLinkIdQuery(linkId, isExam));
+        if (questionaireModel == null)
+        {
+            return NotFound();
+        }
+
         var questionaireDto = _mapper.Map<QuestionaireResponseDto>(questionaireModel);
         return Ok(questionaireDto);
     }
