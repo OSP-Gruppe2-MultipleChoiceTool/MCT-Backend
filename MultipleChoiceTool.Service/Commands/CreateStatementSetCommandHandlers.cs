@@ -26,13 +26,11 @@ namespace MultipleChoiceTool.Service.Commands
                 return null;
             }
 
-            var statementSet = new StatementSetModel(questionaire.Id, request.StatementTypeId, request.Explaination, request.StatementImage);
-            
-            foreach (var statement in request.Statements)
+            var statementSet = new StatementSetModel(questionaire.Id, request.StatementTypeId, request.Explaination, request.StatementImage)
             {
-                statementSet.Statements.Add(statement);
-            }
-
+                Statements = request.Statements.ToList()
+            };
+            
             return await _statementSetWriteRepository.CreateAsync(statementSet, true, cancellationToken);
         }
     }
