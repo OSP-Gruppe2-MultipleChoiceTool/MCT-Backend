@@ -8,6 +8,8 @@ namespace MultipleChoiceTool.Service.Queries;
 
 internal class GetQuestionaireByLinkIdHandler : IRequestHandler<GetQuestionaireByLinkIdQuery, QuestionaireModel?>
 {
+    private static readonly Random _random = new();
+
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IBaseReadRepository<QuestionaireModel> _questionaireReadRepository;
     private readonly IBaseReadRepository<QuestionaireLinkModel> _questionaireLinkRepository;
@@ -38,9 +40,7 @@ internal class GetQuestionaireByLinkIdHandler : IRequestHandler<GetQuestionaireB
 
         if (request.IsExam)
         {
-            var random = new Random();
-            var shuffledStatementSets = questionaire.StatementSets.OrderBy(x => random.Next()).ToList();
-            questionaire = questionaire with { StatementSets = shuffledStatementSets };
+            questionaire = ShuffleStatementSets(questionaire);
         }
 
         return questionaire;
@@ -51,5 +51,24 @@ internal class GetQuestionaireByLinkIdHandler : IRequestHandler<GetQuestionaireB
         var currentDateTime = _dateTimeProvider.UtcNow.Date;
         var expirationDateTime = link.ExpirationDate.ToDateTime(TimeOnly.MinValue);
         return currentDateTime > expirationDateTime;
+    }
+
+    private static QuestionaireModel ShuffleStatementSets(QuestionaireModel questionaire)
+    {
+        var shuffledStatementSets = questionaire.StatementSets
+            .OrderBy(statementSet => _random.Next())
+            .Select(ShuffleStatements)
+            .ToList();
+
+        return questionaire with { StatementSets = shuffledStatementSets };
+    }
+
+    private static StatementSetModel ShuffleStatements(StatementSetModel statementSet)
+    {
+        var shuffledStatements = statementSet.Statements
+            .OrderBy(statement => _random.Next())
+            .ToList();
+
+        return statementSet with { Statements = shuffledStatements };
     }
 }
