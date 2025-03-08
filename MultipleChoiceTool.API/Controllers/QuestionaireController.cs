@@ -9,6 +9,9 @@ using MultipleChoiceTool.Core.Queries;
 
 namespace MultipleChoiceTool.API.Controllers;
 
+/// <summary>
+/// Controller for managing questionnaires.
+/// </summary>
 [ApiController]
 [Route("api/questionaires")]
 public class QuestionaireController : ControllerBase
@@ -16,6 +19,11 @@ public class QuestionaireController : ControllerBase
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="QuestionaireController"/> class.
+    /// </summary>
+    /// <param name="mediator">The mediator.</param>
+    /// <param name="mapper">The mapper.</param>
     public QuestionaireController(
         IMediator mediator,
         IMapper mapper)
@@ -24,6 +32,12 @@ public class QuestionaireController : ControllerBase
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// Creates a new questionnaire.
+    /// </summary>
+    /// <param name="statementTypeId">The ID of the statement type (optional).</param>
+    /// <param name="request">The request containing the title of the questionnaire.</param>
+    /// <returns>The created questionnaire.</returns>
     [HttpPost]
     public async Task<ActionResult<QuestionaireResponseDto>> CreateQuestionaireAsync(
         [FromQuery] Guid? statementTypeId,
@@ -37,6 +51,10 @@ public class QuestionaireController : ControllerBase
         return Ok(questionaireDto);
     }
 
+    /// <summary>
+    /// Gets all questionnaires.
+    /// </summary>
+    /// <returns>A list of questionnaires.</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<QuestionaireResponseDto>>> GetAllQuestionairesAsync()
     {
@@ -45,6 +63,11 @@ public class QuestionaireController : ControllerBase
         return Ok(questionaireDtos);
     }
 
+    /// <summary>
+    /// Gets a questionnaire by its ID.
+    /// </summary>
+    /// <param name="questionaireId">The ID of the questionnaire.</param>
+    /// <returns>The questionnaire with the specified ID.</returns>
     [HttpGet("{questionaireId}")]
     public async Task<ActionResult<QuestionaireResponseDto>> GetQuestionaireByIdAsync(
         [FromRoute] Guid questionaireId)
@@ -59,6 +82,12 @@ public class QuestionaireController : ControllerBase
         return Ok(questionaireDto);
     }
 
+    /// <summary>
+    /// Updates a questionnaire.
+    /// </summary>
+    /// <param name="questionaireId">The ID of the questionnaire.</param>
+    /// <param name="request">The request containing the updated title of the questionnaire.</param>
+    /// <returns>The updated questionnaire.</returns>
     [HttpPatch("{questionaireId}")]
     public async Task<ActionResult<QuestionaireResponseDto>> UpdateQuestionaireAsync(
         [FromRoute] Guid questionaireId,
@@ -75,6 +104,11 @@ public class QuestionaireController : ControllerBase
         return Ok(questionaireDto);
     }
 
+    /// <summary>
+    /// Deletes a questionnaire.
+    /// </summary>
+    /// <param name="questionaireId">The ID of the questionnaire.</param>
+    /// <returns>No content if the deletion was successful.</returns>
     [HttpDelete("{questionaireId}")]
     public async Task<ActionResult> DeleteQuestionaireAsync(
         [FromRoute] Guid questionaireId)
@@ -88,6 +122,11 @@ public class QuestionaireController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Exports a questionnaire to RTF format.
+    /// </summary>
+    /// <param name="questionaireId">The ID of the questionnaire.</param>
+    /// <returns>The RTF formatted questionnaire.</returns>
     [HttpGet("{questionaireId}/export")]
     public async Task<ActionResult<string>> ExportQuestionaireAsync(
         [FromRoute] Guid questionaireId)

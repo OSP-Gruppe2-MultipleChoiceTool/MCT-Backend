@@ -5,8 +5,14 @@ using MultipleChoiceTool.Core.Models;
 
 namespace MultipleChoiceTool.API.Mappings;
 
+/// <summary>
+/// Provides mapping configurations for API DTOs and models.
+/// </summary>
 public class ApiMappings : Profile
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ApiMappings"/> class.
+    /// </summary>
     public ApiMappings()
     {
         CreateMap<QuestionaireLinkModel, QuestionaireLinkResponseDto>();

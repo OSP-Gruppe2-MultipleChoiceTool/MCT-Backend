@@ -6,6 +6,9 @@ using MultipleChoiceTool.Core.Queries;
 
 namespace MultipleChoiceTool.API.Controllers;
 
+/// <summary>
+/// Controller for managing user access to questionnaires.
+/// </summary>
 [ApiController]
 [Route("api/statements")]
 public class UserAccessController : ControllerBase
@@ -13,6 +16,11 @@ public class UserAccessController : ControllerBase
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UserAccessController"/> class.
+    /// </summary>
+    /// <param name="mediator">The mediator.</param>
+    /// <param name="mapper">The mapper.</param>
     public UserAccessController(
         IMediator mediator,
         IMapper mapper)
@@ -21,6 +29,12 @@ public class UserAccessController : ControllerBase
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// Gets a questionnaire by its link ID.
+    /// </summary>
+    /// <param name="linkId">The link ID of the questionnaire.</param>
+    /// <param name="isExam">Indicates whether the questionnaire is an exam.</param>
+    /// <returns>The questionnaire with the specified link ID.</returns>
     [HttpGet]
     public async Task<ActionResult<QuestionaireResponseDto>> GetQuestionaireByLinkAsync(
         [FromQuery] Guid linkId, 

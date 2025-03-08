@@ -6,16 +6,29 @@ using MultipleChoiceTool.Service.Helpers;
 
 namespace MultipleChoiceTool.Service.Commands;
 
+/// <summary>
+/// Handles the export of a questionnaire to RTF format.
+/// </summary>
 internal class ExportQuestionaireToRTFCommandHandler : IRequestHandler<ExportQuestionaireToRTFCommand, string?>
 {
     private readonly IBaseReadRepository<QuestionaireModel> _questionaireReadRepository;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ExportQuestionaireToRTFCommandHandler"/> class.
+    /// </summary>
+    /// <param name="questionaireReadRepository">The repository to read questionnaires from.</param>
     public ExportQuestionaireToRTFCommandHandler(
         IBaseReadRepository<QuestionaireModel> questionaireReadRepository)
     {
         _questionaireReadRepository = questionaireReadRepository;
     }
 
+    /// <summary>
+    /// Handles the request to export a questionnaire to RTF format.
+    /// </summary>
+    /// <param name="request">The request containing the details of the questionnaire to export.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>The RTF string if successful; otherwise, null.</returns>
     public async Task<string?> Handle(ExportQuestionaireToRTFCommand request, CancellationToken cancellationToken)
     {
         var questionaire = await _questionaireReadRepository.FindByIdAsync(request.QuestionaireId, true, cancellationToken);
@@ -27,6 +40,11 @@ internal class ExportQuestionaireToRTFCommandHandler : IRequestHandler<ExportQue
         return ExportToRTF(questionaire);
     }
 
+    /// <summary>
+    /// Exports the given questionnaire to RTF format.
+    /// </summary>
+    /// <param name="questionaire">The questionnaire to export.</param>
+    /// <returns>The RTF string.</returns>
     private static string ExportToRTF(QuestionaireModel questionaire)
     {
         var rtfBuilder = new RTFDocumentBuilder();
@@ -37,6 +55,11 @@ internal class ExportQuestionaireToRTFCommandHandler : IRequestHandler<ExportQue
         return rtfBuilder.Build();
     }
 
+    /// <summary>
+    /// Adds the legend table to the RTF document.
+    /// </summary>
+    /// <param name="rtfBuilder">The RTF document builder.</param>
+    /// <param name="statementSets">The statement sets of the questionnaire.</param>
     private static void AddLegendTable(RTFDocumentBuilder rtfBuilder, ICollection<StatementSetModel> statementSets)
     {
         var legendTable = rtfBuilder.AddTable();
@@ -54,6 +77,12 @@ internal class ExportQuestionaireToRTFCommandHandler : IRequestHandler<ExportQue
         legendTable.AddRow([MakeRTFBold($"{responseOptionCount}"), "All Statements are correct"]);
     }
 
+    /// <summary>
+    /// Adds a legend option row to the legend table.
+    /// </summary>
+    /// <param name="legendTable">The legend table builder.</param>
+    /// <param name="iteration">The current iteration number.</param>
+    /// <param name="maxStatementCount">The maximum number of statements.</param>
     private static void AddLegendOptionRow(RTFTableBuilder legendTable, int iteration, int maxStatementCount)
     {
         // AI-Generated bomb!
@@ -74,6 +103,11 @@ internal class ExportQuestionaireToRTFCommandHandler : IRequestHandler<ExportQue
         }
     }
 
+    /// <summary>
+    /// Adds the statement table to the RTF document.
+    /// </summary>
+    /// <param name="rtfBuilder">The RTF document builder.</param>
+    /// <param name="statementSets">The statement sets of the questionnaire.</param>
     private static void AddStatementTable(RTFDocumentBuilder rtfBuilder, IEnumerable<StatementSetModel> statementSets)
     {
         var statementTable = rtfBuilder.AddTable();
@@ -87,6 +121,12 @@ internal class ExportQuestionaireToRTFCommandHandler : IRequestHandler<ExportQue
         }
     }
 
+    /// <summary>
+    /// Adds a statement set row to the statement table.
+    /// </summary>
+    /// <param name="tableBuilder">The statement table builder.</param>
+    /// <param name="statementSet">The statement set to add.</param>
+    /// <param name="maxStatementCount">The maximum number of statements.</param>
     private static void AddStatementSetRow(RTFTableBuilder tableBuilder, StatementSetModel statementSet, int maxStatementCount)
     {
         var padding = Enumerable
@@ -103,6 +143,11 @@ internal class ExportQuestionaireToRTFCommandHandler : IRequestHandler<ExportQue
         tableBuilder.AddRow(statementContents);
     }
 
+    /// <summary>
+    /// Adds the header row to the statement table.
+    /// </summary>
+    /// <param name="tableBuilder">The statement table builder.</param>
+    /// <param name="statementCount">The number of statements.</param>
     private static void AddStatementSetHeaderRow(RTFTableBuilder tableBuilder, int statementCount)
     {
         var headerRow = Enumerable
@@ -114,11 +159,21 @@ internal class ExportQuestionaireToRTFCommandHandler : IRequestHandler<ExportQue
         tableBuilder.AddRow(headerRow);
     }
 
+    /// <summary>
+    /// Gets the maximum number of statements in the statement sets.
+    /// </summary>
+    /// <param name="statementSets">The statement sets.</param>
+    /// <returns>The maximum number of statements.</returns>
     private static int GetMaxStatementCount(IEnumerable<StatementSetModel> statementSets)
     {
         return statementSets.Max(statementSet => statementSet.Statements.Count);
     }
 
+    /// <summary>
+    /// Makes the given text bold in RTF format.
+    /// </summary>
+    /// <param name="text">The text to make bold.</param>
+    /// <returns>The bold RTF string.</returns>
     private static string MakeRTFBold(string text)
     {
         return $@"\b {text} \b0";

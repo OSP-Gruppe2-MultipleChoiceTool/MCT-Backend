@@ -6,6 +6,11 @@ using MultipleChoiceTool.Infrastructure.Extensions;
 
 namespace MultipleChoiceTool.Infrastructure.Repositories;
 
+/// <summary>
+/// Base repository for writing entities to the database.
+/// </summary>
+/// <typeparam name="TEntity">The type of the entity.</typeparam>
+/// <typeparam name="TModel">The type of the model.</typeparam>
 internal class EFBaseWriteRepository<TEntity, TModel> : IBaseWriteRepository<TModel>
     where TEntity : class
     where TModel : class
@@ -13,6 +18,11 @@ internal class EFBaseWriteRepository<TEntity, TModel> : IBaseWriteRepository<TMo
     protected readonly DbContext _dbContext;
     protected readonly IMapper _mapper;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EFBaseWriteRepository{TEntity, TModel}"/> class.
+    /// </summary>
+    /// <param name="dbContext">The database context.</param>
+    /// <param name="mapper">The mapper.</param>
     public EFBaseWriteRepository(
         DbContext dbContext,
         IMapper mapper)
@@ -21,6 +31,7 @@ internal class EFBaseWriteRepository<TEntity, TModel> : IBaseWriteRepository<TMo
         _mapper = mapper;
     }
 
+    /// <inheritdoc />
     public async Task<TModel> CreateAsync(TModel model, bool autoInclude = false, CancellationToken cancellationToken = default)
     {
         var entity = _mapper.Map<TEntity>(model);
@@ -30,11 +41,13 @@ internal class EFBaseWriteRepository<TEntity, TModel> : IBaseWriteRepository<TMo
         return await HandleResultAsync(result, autoInclude, cancellationToken);
     }
 
+    /// <inheritdoc />
     public async Task<TModel> CreateAsync(TModel model, CancellationToken cancellationToken = default)
     {
         return await CreateAsync(model, autoInclude: false, cancellationToken: cancellationToken);
     }
 
+    /// <inheritdoc />
     public async Task<TModel> DeleteAsync(TModel model, bool autoInclude = false, CancellationToken cancellationToken = default)
     {
         var entity = _mapper.Map<TEntity>(model);
@@ -44,11 +57,13 @@ internal class EFBaseWriteRepository<TEntity, TModel> : IBaseWriteRepository<TMo
         return await HandleResultAsync(result, autoInclude, cancellationToken);
     }
 
+    /// <inheritdoc />
     public async Task<TModel> DeleteAsync(TModel model, CancellationToken cancellationToken = default)
     {
         return await DeleteAsync(model, autoInclude: false, cancellationToken: cancellationToken);
     }
 
+    /// <inheritdoc />
     public async Task<TModel> UpdateAsync(TModel model, bool autoInclude = false, CancellationToken cancellationToken = default)
     {
         var entity = _mapper.Map<TEntity>(model);
@@ -58,6 +73,7 @@ internal class EFBaseWriteRepository<TEntity, TModel> : IBaseWriteRepository<TMo
         return await HandleResultAsync(result, autoInclude, cancellationToken);
     }
 
+    /// <inheritdoc />
     public async Task<TModel> UpdateAsync(TModel model, CancellationToken cancellationToken = default)
     {
         return await UpdateAsync(model, autoInclude: false, cancellationToken: cancellationToken);
