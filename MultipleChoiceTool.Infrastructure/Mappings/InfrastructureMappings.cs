@@ -4,8 +4,14 @@ using MultipleChoiceTool.Infrastructure.Entities;
 
 namespace MultipleChoiceTool.Infrastructure.Mappings;
 
+/// <summary>
+/// Provides mapping configurations between domain models and entities.
+/// </summary>
 internal class InfrastructureMappings : Profile
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InfrastructureMappings"/> class.
+    /// </summary>
     public InfrastructureMappings()
     {
         CreateMap<QuestionaireModel, QuestionaireEntity>()

@@ -9,6 +9,9 @@ using MultipleChoiceTool.Core.Queries;
 
 namespace MultipleChoiceTool.API.Controllers;
 
+/// <summary>
+/// Controller for managing statement sets.
+/// </summary>
 [ApiController]
 [Route("api/questionaires/{questionaireId}/statement-sets")]
 public class StatementSetController : ControllerBase
@@ -16,6 +19,11 @@ public class StatementSetController : ControllerBase
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="StatementSetController"/> class.
+    /// </summary>
+    /// <param name="mediator">The mediator.</param>
+    /// <param name="mapper">The mapper.</param>
     public StatementSetController(
         IMediator mediator,
         IMapper mapper)
@@ -24,6 +32,12 @@ public class StatementSetController : ControllerBase
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// Creates a new statement set.
+    /// </summary>
+    /// <param name="questionaireId">The ID of the questionnaire.</param>
+    /// <param name="request">The request containing the details of the statement set.</param>
+    /// <returns>The created statement set.</returns>
     [HttpPost]
     public async Task<ActionResult<StatementSetResponseDto>> CreateStatementSetAsync(
         [FromRoute] Guid questionaireId,
@@ -43,6 +57,11 @@ public class StatementSetController : ControllerBase
         return Ok(statementSetDto);
     }
 
+    /// <summary>
+    /// Gets all statement sets for a questionnaire.
+    /// </summary>
+    /// <param name="questionaireId">The ID of the questionnaire.</param>
+    /// <returns>A list of statement sets.</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<StatementSetResponseDto>>> GetAllStatementSetsAsync(
         [FromRoute] Guid questionaireId)
@@ -57,6 +76,13 @@ public class StatementSetController : ControllerBase
         return Ok(statementSetDtos);
     }
 
+    /// <summary>
+    /// Updates a statement set.
+    /// </summary>
+    /// <param name="questionaireId">The ID of the questionnaire.</param>
+    /// <param name="statementSetId">The ID of the statement set.</param>
+    /// <param name="request">The request containing the updated details of the statement set.</param>
+    /// <returns>The updated statement set.</returns>
     [HttpPatch("{statementSetId}")]
     public async Task<ActionResult<IEnumerable<StatementSetResponseDto>>> UpdateStatementSetAsync(
         [FromRoute] Guid questionaireId,
@@ -77,6 +103,12 @@ public class StatementSetController : ControllerBase
         return Ok(statementSetDto);
     }
 
+    /// <summary>
+    /// Deletes a statement set.
+    /// </summary>
+    /// <param name="questionaireId">The ID of the questionnaire.</param>
+    /// <param name="statementSetId">The ID of the statement set.</param>
+    /// <returns>No content if the deletion was successful.</returns>
     [HttpDelete("{statementSetId}")]
     public async Task<ActionResult> DeleteStatementSetAsync(
         [FromRoute] Guid questionaireId,
