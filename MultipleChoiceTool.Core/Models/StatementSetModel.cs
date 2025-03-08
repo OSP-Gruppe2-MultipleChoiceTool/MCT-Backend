@@ -23,7 +23,7 @@ public record StatementSetModel
     /// <summary>
     /// Gets the statement type associated with this statement set.
     /// </summary>
-    public StatementTypeModel? StatementType { get; init; }
+    public StatementTypeModel? StatementType { get; set; }
 
     /// <summary>
     /// Gets or sets the explanation for the statement set.

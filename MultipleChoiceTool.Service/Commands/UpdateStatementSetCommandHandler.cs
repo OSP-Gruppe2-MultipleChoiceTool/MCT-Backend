@@ -46,6 +46,7 @@ internal class UpdateStatementSetCommandHandler : IRequestHandler<UpdateStatemen
 
         if (request.StatementTypeId != null)
         {
+            statementSet.StatementType = null;
             statementSet.StatementTypeId = request.StatementTypeId;
         }
 
