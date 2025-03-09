@@ -1,0 +1,20 @@
+@using MultipleChoiceTool.Core.Models
+@using RazorLight
+
+@inherits TemplatePage<QuestionaireModel>
+
+<html>
+<body>
+    <h1>Legende</h1>
+    @{
+        await IncludeAsync("MultipleChoiceTool.Service.Templates.QuestionaireLegendTemplate", Model);
+    }
+
+    <br />
+
+    <h1>Aussagen</h1>
+    @{
+        await IncludeAsync("MultipleChoiceTool.Service.Templates.QuestionaireStatementsTemplate", Model);
+    }
+</body>
+</html>
