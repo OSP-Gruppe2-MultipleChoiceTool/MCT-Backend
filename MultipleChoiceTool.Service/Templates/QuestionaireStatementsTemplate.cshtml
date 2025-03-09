@@ -1,0 +1,57 @@
+@using MultipleChoiceTool.Core.Models
+@using RazorLight
+
+@inherits TemplatePage<QuestionaireModel>
+
+@{
+    var maxStatementCount = GetMaxStatementCount(Model.StatementSets);
+}
+
+<table border="1" style="border-collapse: collapse; width: 100%;">
+    <tr>
+        @foreach (var statementHeaderElement in GetStatementHeaderElements(maxStatementCount))
+        {
+            <td style="padding: 5px"><strong>@statementHeaderElement</strong></td>
+        }
+    </tr>
+
+    @foreach (var statementSet in Model.StatementSets)
+    {
+        <tr>
+            @foreach (var statementElement in GetStatementElements(statementSet, maxStatementCount))
+            {
+                <td style="padding: 5px">@statementElement</td>
+            }
+        </tr>
+    }
+</table>
+
+@{
+    string[] GetStatementElements(StatementSetModel statementSet, int maxStatementCount)
+    {
+        var paddingElements = Enumerable
+            .Range(0, maxStatementCount - statementSet.Statements.Count)
+            .Select(_ => string.Empty)
+            .ToArray();
+
+        return statementSet.Statements
+            .Select(statement => statement.Content)
+            .Concat(paddingElements)
+            .Concat([string.Empty])
+            .ToArray();
+    }
+
+    string[] GetStatementHeaderElements(int maxStatementCount)
+    {
+        return Enumerable
+            .Range(1, maxStatementCount)
+            .Select(i => $"Aussage {i}")
+            .Concat(["Antwort"])
+            .ToArray();
+    }
+
+    int GetMaxStatementCount(IEnumerable<StatementSetModel> statementSets)
+    {
+        return statementSets.Max(statementSet => statementSet.Statements.Count);
+    }
+}

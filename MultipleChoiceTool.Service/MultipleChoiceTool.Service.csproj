@@ -7,6 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Templates\QuestionaireLegendTemplate.cshtml" />
+    <None Remove="Templates\QuestionaireStatementsTemplate.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\QuestionaireLegendTemplate.cshtml" />
+    <EmbeddedResource Include="Templates\QuestionaireStatementsTemplate.cshtml" />
+    <EmbeddedResource Include="Templates\QuestionaireTemplate.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RazorLight" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MultipleChoiceTool.Core\MultipleChoiceTool.Core.csproj" />
   </ItemGroup>
 

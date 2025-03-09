@@ -1,0 +1,58 @@
+@using MultipleChoiceTool.Core.Models
+@using RazorLight
+
+@inherits TemplatePage<QuestionaireModel>
+
+@{
+    var maxStatementCount = GetMaxStatementCount(Model.StatementSets);
+    var responseOptionCount = Math.Pow(2, maxStatementCount) - 1;
+}
+
+<table border="1" style="border-collapse: collapse;">
+    <tr>
+        <td style="padding: 5px"><strong>Nummer</strong></td>
+        <td style="padding: 5px"><strong>Bedeutung</strong></td>
+    </tr>
+
+    <tr>
+        <td style="padding: 5px">0</td>
+        <td style="padding: 5px">Keine der Aussagen ist korrekt</td>
+    </tr>
+
+    @for (int i = 1; i < responseOptionCount; i++)
+    {
+        var correctStatements = GetCorrectStatementsForIteration(i, maxStatementCount);
+        var correctStatementsStr = string.Join(", ", correctStatements);
+
+        <tr>
+            <td style="padding: 5px"><strong>@i</strong></td>
+            @if (correctStatements.Length == 1)
+            {
+                <td style="padding: 5px">Aussage @correctStatementsStr ist korrekt</td>
+            }
+            else
+            {
+                <td style="padding: 5px">Aussagen @correctStatementsStr sind korrekt</td>
+            }
+        </tr>
+    }
+
+    <tr>
+        <td style="padding: 5px">@responseOptionCount</td>
+        <td style="padding: 5px">Alle Aussagen sind korrekt</td>
+    </tr>
+</table>
+
+@{
+    int[] GetCorrectStatementsForIteration(int iteration, int maxStatementCount)
+    {
+        return Enumerable.Range(1, maxStatementCount)
+            .Where(statement => (iteration & (1 << (statement - 1))) != 0)
+            .ToArray();
+    }
+
+    int GetMaxStatementCount(IEnumerable<StatementSetModel> statementSets)
+    {
+       return statementSets.Max(statementSet => statementSet.Statements.Count);
+    }
+}

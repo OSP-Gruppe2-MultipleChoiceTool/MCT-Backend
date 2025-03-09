@@ -123,15 +123,15 @@ public class QuestionaireController : ControllerBase
     }
 
     /// <summary>
-    /// Exports a questionnaire to RTF format.
+    /// Exports a questionnaire to Html format.
     /// </summary>
     /// <param name="questionaireId">The ID of the questionnaire.</param>
-    /// <returns>The RTF formatted questionnaire.</returns>
+    /// <returns>The Html formatted questionnaire.</returns>
     [HttpGet("{questionaireId}/export")]
     public async Task<ActionResult<string>> ExportQuestionaireAsync(
         [FromRoute] Guid questionaireId)
     {
-        var richText = await _mediator.Send(new ExportQuestionaireToRTFCommand(questionaireId));
+        var richText = await _mediator.Send(new ExportQuestionaireToHtmlCommand(questionaireId));
         if (richText == null)
         {
             return NotFound();
